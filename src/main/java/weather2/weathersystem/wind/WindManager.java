@@ -67,10 +67,8 @@ public class WindManager {
 	public static boolean FORCE_ON_DEBUG_TESTING = false;
 
 	public HashMap<Long, WindInfoCache> lookupChunkToWindInfo = new HashMap<>();
-	//this one specifically hashes with a y value, so different vertical heights within the same chunk can have different results still
-	public HashMap<Long, WindInfoCache> lookupChunkWithHeightToWindInfo = new HashMap<>();
-	public int cachedWindInfoUpdateFrequency = 100;
-	public int cachedChunkHeightUpdateFrequency = 20*60*5;
+	//used to rotate through cached chunks, refreshing 1 chunk per tick
+	public int cachedChunkRefreshIndex = 0;
 
 	//used by client particles, and off thread work
 	public float cachedWindSpeedClient = 0;
@@ -122,6 +120,7 @@ public class WindManager {
 	//TODO: design flaw: use of extraHeightAmpMax gets cached into WindInfoCache, will mess with results if 2 sources use 2 different extraHeightAmpMax
 	//workaround for now is that on server side, only turbine is using this cache, need to make the extraHeightAmpMax calculation outside the cache, by fixing the other hacks below
 	public float getWindSpeedPositional(BlockPos pos, float extraHeightAmpMax, boolean useClientCache) {
+		//if the cache is invalid, return 0 instead of executing the recalculation
 		if (manager.getWorld().isClientSide() && useClientCache) {
 			return cachedWindSpeedClient;
 		}
@@ -407,6 +406,8 @@ public class WindManager {
 				}
 
 				//WIND ANGLE //
+
+				refreshWindInfoOneChunk();
 			} else {
 
 				tickClient();
@@ -463,36 +464,47 @@ public class WindManager {
 		return (float) (1F - (dist / maxDist)) * 2F;
 	}
 
-	public WindInfoCache getWindInfoCacheForChunk(BlockPos blockPos, boolean forHeightChunks) {
-		//note: the y value hashing here is used when we want data at that height level
-		BlockPos chunkPos = new BlockPos(blockPos.getX() >> 4, forHeightChunks ? blockPos.getY() >> 4 : 0, blockPos.getZ() >> 4);
+	public WindInfoCache getWindInfoCacheForChunk(BlockPos blockPos) {
+		BlockPos chunkPos = new BlockPos(blockPos.getX() >> 4, 0, blockPos.getZ() >> 4);
 
-		HashMap<Long, WindInfoCache> lookup = forHeightChunks ? lookupChunkWithHeightToWindInfo : lookupChunkToWindInfo;
 		long hash = chunkPos.asLong();
-		if (lookup.containsKey(hash)) {
-			return lookup.get(hash);
+		if (lookupChunkToWindInfo.containsKey(hash)) {
+			return lookupChunkToWindInfo.get(hash);
 		} else {
 			WindInfoCache cache = new WindInfoCache();
-			lookup.put(hash, cache);
+			lookupChunkToWindInfo.put(hash, cache);
 			return cache;
 		}
 	}
 
-	public float getCachedWindSpeedForHeight(BlockPos blockPos, float extraHeightAmpMax) {
-		WindInfoCache cache = getWindInfoCacheForChunk(blockPos, true);
-		if (cache.cacheTimeWindSpeedAtChunkHeight == 0 || cache.cacheTimeWindSpeedAtChunkHeight + cachedWindInfoUpdateFrequency <= manager.getWorld().getGameTime()) {
-			cache.cacheTimeWindSpeedAtChunkHeight = manager.getWorld().getGameTime();
-			cache.windSpeedAtChunkHeight = getWindSpeed(blockPos, extraHeightAmpMax);
+	/**
+	 * Refreshes 1 cached chunk per tick, rotating through the cached chunks so all stay fresh without time based expiry
+	 */
+	public void refreshWindInfoOneChunk() {
+		if (lookupChunkToWindInfo.isEmpty()) {
+			return;
 		}
-		return cache.windSpeedAtChunkHeight;
+		Long[] keys = lookupChunkToWindInfo.keySet().toArray(new Long[0]);
+		if (keys.length == 0) {
+			return;
+		}
+		if (cachedChunkRefreshIndex >= keys.length) {
+			cachedChunkRefreshIndex = 0;
+		}
+		long hash = keys[cachedChunkRefreshIndex];
+		cachedChunkRefreshIndex++;
+		WindInfoCache cache = lookupChunkToWindInfo.get(hash);
+		if (cache == null) {
+			return;
+		}
+		BlockPos chunkPos = BlockPos.of(hash);
+		BlockPos pos = new BlockPos((chunkPos.getX() << 4) + 8, 0, (chunkPos.getZ() << 4) + 8);
+		cache.windSpeedEvent = calculateWindSpeedEventForPos(pos);
+		cache.averageChunkHeightAround = calculateAverageChunkHeightAround(new BlockPos(chunkPos.getX(), 0, chunkPos.getZ()));
 	}
 
 	public float getCachedWindSpeedEventForChunkPos(BlockPos blockPos) {
-		WindInfoCache cache = getWindInfoCacheForChunk(blockPos, false);
-		if (cache.cacheTimeWindSpeedEvent == 0 || cache.cacheTimeWindSpeedEvent + cachedWindInfoUpdateFrequency <= manager.getWorld().getGameTime()) {
-			cache.cacheTimeWindSpeedEvent = manager.getWorld().getGameTime();
-			cache.windSpeedEvent = calculateWindSpeedEventForPos(blockPos);
-		}
+		WindInfoCache cache = getWindInfoCacheForChunk(blockPos);
 		return cache.windSpeedEvent;
 	}
 
@@ -508,12 +520,7 @@ public class WindManager {
 	}
 
 	public int getCachedAverageChunkHeightAround(BlockPos blockPos) {
-		WindInfoCache cache = getWindInfoCacheForChunk(blockPos, false);
-		if (cache.cacheTimeChunkHeight == 0 || cache.cacheTimeChunkHeight + cachedChunkHeightUpdateFrequency <= manager.getWorld().getGameTime()) {
-			cache.cacheTimeChunkHeight = manager.getWorld().getGameTime();
-			BlockPos chunkPos = new BlockPos(blockPos.getX() >> 4, 0, blockPos.getZ() >> 4);
-			cache.averageChunkHeightAround = calculateAverageChunkHeightAround(chunkPos);
-		}
+		WindInfoCache cache = getWindInfoCacheForChunk(blockPos);
 		return cache.averageChunkHeightAround;
 	}
 

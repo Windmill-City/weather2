@@ -34,11 +34,6 @@ public class WindReader {
 		return weather != null ? weather.getWindManager().getWindSpeed(pos, extraHeightAmpMax) : 0;
 	}
 
-	public static float getWindSpeedCached(Level world, @Nullable BlockPos pos, float extraHeightAmpMax) {
-		WeatherManager weather = getWeatherManagerFor(world);
-		return weather != null ? weather.getWindManager().getCachedWindSpeedForHeight(pos, extraHeightAmpMax) : 0;
-	}
-
 	public static WeatherManager getWeatherManagerFor(Level world) {
 		if (world.isClientSide) {
 			return getWeatherManagerClient();
