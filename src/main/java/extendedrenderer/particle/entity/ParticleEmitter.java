@@ -12,7 +12,7 @@ public class ParticleEmitter extends EntityRotFX {
 
     @Override
     public void tick() {
-        //super.tick();
+
         if (this.age++ >= this.lifetime) {
             this.remove();
         }
@@ -20,6 +20,6 @@ public class ParticleEmitter extends EntityRotFX {
 
     @Override
     public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
-        //super.render(buffer, renderInfo, partialTicks);
+
     }
 }

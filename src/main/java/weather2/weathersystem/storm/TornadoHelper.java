@@ -46,48 +46,39 @@ import weather2.weathersystem.tornado.simple.TornadoFunnelSimple;
 import java.util.*;
 
 public class TornadoHelper {
-	
+
 	public StormObject storm;
-	
-	//public int blockCount = 0;
-	
+
+
 	public int ripCount = 0;
 
     public long lastGrabTime = 0;
     public int tickGrabCount = 0;
     public int removeCount = 0;
     public int tryRipCount = 0;
-    
+
     public int tornadoBaseSize = 5;
     public int grabDist = 100;
-    
-    //potentially an issue var
+
+
     public boolean lastTickPlayerClose;
-    
-    /**
-     * this tick queue isnt perfect, created to reduce chunk updates on client, but not removing block right away messes with block rip logic:
-     * - wont dig for blocks under this block until current is removed
-     * - initially, entries were spam added as the block still existed, changed list to hashmap to allow for blockpos hash lookup before adding another entry
-     * - entity creation relocated to queue processing to initially prevent entity spam, but with entry lookup, not needed, other issues like collision are now the reason why we still relocated entity creation to queue process
-     */
+
+
     private HashMap<BlockPos, BlockUpdateSnapshot> listBlockUpdateQueue = new HashMap<BlockPos, BlockUpdateSnapshot>();
     private int queueProcessRate = 40;
 
-    //for client player, for use of playing sounds
+
 	public static boolean isOutsideCached = false;
 
-	//for caching query on if a block damage preventer block is nearby, also assume blocked at first for safety
+
 	public boolean isBlockGrabbingBlockedCached = true;
 	public long isBlockGrabbingBlockedCached_LastCheck = 0;
 
-	//static because its a shared list for the whole dimension
-	//public static HashMap<Integer, Long> flyingBlock_LastQueryTime = new HashMap<>();
-	//public static HashMap<Integer, Integer> flyingBlock_LastCount = new HashMap<>();
 
 	public static GameProfile fakePlayerProfile = null;
-    
+
     public static class BlockUpdateSnapshot {
-    	//private int dimID;
+
 		private ResourceKey<Level> dimension;
     	private BlockState state;
     	private BlockState statePrev;
@@ -125,7 +116,7 @@ public class TornadoHelper {
 		public void setPos(BlockPos pos) {
 			this.pos = pos;
 		}
-    	
+
     	public boolean isCreateEntityForBlockRemoval() {
 			return createEntityForBlockRemoval;
 		}
@@ -133,7 +124,7 @@ public class TornadoHelper {
 		public void setCreateEntityForBlockRemoval(boolean createEntityForBlockRemoval) {
 			this.createEntityForBlockRemoval = createEntityForBlockRemoval;
 		}
-		
+
     	public BlockState getStatePrev() {
 			return statePrev;
 		}
@@ -141,17 +132,17 @@ public class TornadoHelper {
 		public void setStatePrev(BlockState statePrev) {
 			this.statePrev = statePrev;
 		}
-    	
+
     }
-	
+
 	public TornadoHelper(StormObject parStorm) {
 		storm = parStorm;
 	}
-	
+
 	public int getTornadoBaseSize() {
         int sizeChange = 10;
 
-		//special love tropics overrides
+
 		if (storm.isPlayerControlled()) {
 			if (storm.isBaby()) {
 				return 8;
@@ -176,7 +167,6 @@ public class TornadoHelper {
 	}
 
 
-
 	public void tick(Level parWorld) {
 
 		if (!parWorld.isClientSide()) {
@@ -188,8 +178,8 @@ public class TornadoHelper {
 					if (world != null) {
 						world.setBlock(snapshot.getPos(), snapshot.getState(), 3);
 						if (snapshot.isCreateEntityForBlockRemoval()) {
-							//moved to where we add to the queue for less clunky visuals
-							//((WeatherManagerServer)this.storm.manager).syncBlockParticleNew(snapshot.getPos(), snapshot.getStatePrev(), storm);
+
+
 						}
 					}
 				}
@@ -213,9 +203,9 @@ public class TornadoHelper {
 		} else if (storm.levelCurIntensityStage >= StormObject.STATE_STAGE2) {
 			tryRipMax *= 1.2;
 		}
-		//tryRipMax = 1000;
+
 		int firesPerTickMax = 1;
-		//tornado profile changing from storm data
+
 		tornadoBaseSize = getTornadoBaseSize();
 
 		if (storm.stormType == storm.TYPE_WATER) {
@@ -227,18 +217,16 @@ public class TornadoHelper {
 		Random rand = new Random();
 		if (!parWorld.isClientSide() && !Weather.isLoveTropicsInstalled() && (ConfigTornado.Storm_Tornado_grabBlocks || storm.isFirenado))
 		{
-			//int yStart = (int) (storm.posGround.y - 10);
+
 			int yStart = 0;
-			int yEnd = (int)storm.pos.y/* + 72*/;
+			int yEnd = (int)storm.pos.y;
 			int yInc = 1;
 			Biome bgb = parWorld.getBiome(new BlockPos(WeatherUtilBlock.getPrecipitationHeightSafe(parWorld, new BlockPos(Mth.floor(storm.pos.x), 0, Mth.floor(storm.pos.z))))).get();
 
-			//prevent grabbing in high areas (hills)
-			//TODO: 1.10 make sure minHeight/maxHeight converted to baseHeight/scale is correct, guessing we can just not factor in variation
-			//TODO: 1.18: getDepth formally base height, seems entirely gone now
+
 			double depth = 0;
-			//depth = bgb.getDepth();
-			if (bgb != null && (depth/* + bgb.getScale()*/ <= 0.7 || storm.isFirenado)) {
+
+			if (bgb != null && (depth <= 0.7 || storm.isFirenado)) {
 
 				boolean newTest = false;
 
@@ -257,11 +245,11 @@ public class TornadoHelper {
 						float particleSpaceOccupy = 1F;
 						float scanResolution = (float) Math.floor(circumference / particleSpaceOccupy);
 						float particleSpacingDegrees = 360 / scanResolution;
-						//scanResolution = 1F;
+
 
 						for (float deg = 0; deg < 360; deg += particleSpacingDegrees) {
 							float radiusScanSize = 5F;
-							//for (float radiusToUse = radius - radiusScanSize; radiusToUse <= radius; radiusToUse+=0.5F) {
+
 							for (float radiusToUse = radius; radiusToUse <= radius; radiusToUse += 1F) {
 								float x = (float) (layer.getPos().x + (-Math.sin(Math.toRadians(deg)) * radiusScanSize));
 								float z = (float) (layer.getPos().z + (Math.cos(Math.toRadians(deg)) * radiusScanSize));
@@ -274,7 +262,7 @@ public class TornadoHelper {
 								BlockState state = parWorld.getBlockState(pos);
 
 								if (parWorld.getGameTime() % 10 == 0 && radiusToUse == radius - radiusScanSize) {
-									//((ServerLevel) parWorld).sendParticles(ParticleTypes.HEART, pos.getX(), pos.getY(), pos.getZ(), 1, 0.3D, 0D, 0.3D, 1D);
+
 								}
 
 								tryCount++;
@@ -297,7 +285,7 @@ public class TornadoHelper {
 						}
 					}
 
-					//CULog.dbg("tryCount: " + tryCount);
+
 				} else {
 					int ii = 2;
 
@@ -389,7 +377,7 @@ public class TornadoHelper {
 						}
 					}
 
-					//CULog.dbg("tryCount: " + tryCount);
+
 				}
 
 
@@ -400,10 +388,6 @@ public class TornadoHelper {
 			seesLight = true;
 		}
 
-		/*if (Math.abs((spawnYOffset - storm.pos.y)) > 5)
-		{
-			seesLight = true;
-		}*/
 
 		if (!parWorld.isClientSide() && storm.isFirenado) {
 			if (storm.levelCurIntensityStage >= storm.STATE_STAGE1)
@@ -411,17 +395,8 @@ public class TornadoHelper {
 					BlockPos posUp = CoroUtilBlock.blockPos(storm.posGround.x, storm.posGround.y + rand.nextInt(30), storm.posGround.z);
 					BlockState state = parWorld.getBlockState(posUp);
 					if (CoroUtilBlock.isAir(state.getBlock())) {
-						//parWorld.setBlockState(posUp, Blocks.FIRE.getDefaultState());
 
-						//TODO: 1.14 uncomment
-					/*EntityMovingBlock mBlock = new EntityMovingBlock(parWorld, posUp.getX(), posUp.getY(), posUp.getZ(), Blocks.FIRE.getDefaultState(), storm);
-					mBlock.metadata = 15;
-					double speed = 2D;
-					mBlock.motionX += (rand.nextDouble() - rand.nextDouble()) * speed;
-					mBlock.motionZ += (rand.nextDouble() - rand.nextDouble()) * speed;
-					mBlock.motionY = 1D;
-					mBlock.mode = 0;
-					parWorld.addEntity(mBlock);*/
+
 					}
 				}
 
@@ -439,7 +414,7 @@ public class TornadoHelper {
 				funnelBottomY = (int) layer.getPos().y();
 			}
 
-			//if firenado funnel reached down enough to hit this y coord
+
 			if (tryY > funnelBottomY - 3) {
 				double d0 = storm.pos.x - tryX;
 				double d2 = storm.pos.z - tryZ;
@@ -458,32 +433,21 @@ public class TornadoHelper {
 			}
 		}
 	}
-	
+
 	public boolean isNoDigCoord(int x, int y, int z) {
 
-        // MCPC start
-          /*org.bukkit.entity.Entity bukkitentity = this.getBukkitEntity();
-          if ((bukkitentity instanceof Player)) {
-            Player player = (Player)bukkitentity;
-            BlockBreakEvent breakev = new BlockBreakEvent(player.getWorld().getBlockStateAt(x, y, z), player);
-            Bukkit.getPluginManager().callEvent(breakev);
-            if (breakev.isCancelled()) {
-                return true;
-            }
-          }*/
-          // MCPC end
-          
+
           return false;
     }
 
-	public boolean tryRip(Level parWorld, int tryX, int tryY, int tryZ/*, boolean notify*/)
+	public boolean tryRip(Level parWorld, int tryX, int tryY, int tryZ)
     {
         boolean tryRip = true;
 		BlockPos pos = new BlockPos(tryX, tryY, tryZ);
 		if (listBlockUpdateQueue.containsKey(pos)) {
 			return true;
 		}
-        
+
         if (!tryRip) return true;
         if (!ConfigTornado.Storm_Tornado_grabBlocks) return true;
         if (isNoDigCoord(tryX, tryY, tryZ)) return true;
@@ -499,7 +463,7 @@ public class TornadoHelper {
 
         	int blockCount = 0;
 
-			//old per storm blockCount seems glitched... lets use a global we cache count of
+
             if (parWorld.isLoaded(CoroUtilBlock.blockPos(storm.pos.x, 128, storm.pos.z)) &&
 				lastGrabTime < System.currentTimeMillis() &&
 				tickGrabCount < ConfigTornado.Storm_Tornado_maxBlocksGrabbedPerTick) {
@@ -539,8 +503,8 @@ public class TornadoHelper {
     {
         if (!CoroUtilBlock.isAir(state.getBlock()) &&
 				state.getBlock() != Blocks.FIRE &&
-				//TODO: 1.14 uncomment
-				/*state.getBlock() != CommonProxy.blockRepairingBlock &&*/
+
+
 				WeatherUtil.shouldGrabBlock(parWorld, state) &&
 				!isBlockGrabbingBlocked(parWorld, state, pos))
         {
@@ -598,7 +562,7 @@ public class TornadoHelper {
 					return ConfigTornado.Storm_Tornado_grabAnimals;
 				}
 			}
-			//for moving blocks, other non livings
+
 			return true;
 		}
 
@@ -637,7 +601,7 @@ public class TornadoHelper {
 				return clientConfig.Storm_Tornado_grabAnimals;
 			}
 		}
-		//for moving blocks, other non livings
+
 		return true;
 	}
 
@@ -648,10 +612,8 @@ public class TornadoHelper {
 
     public boolean forceRotate(Level parWorld, boolean featherFallInstead)
     {
-    	
-    	//changed for weather2:
-    	//canEntityBeSeen commented out till replaced with coord one, might cause issues
-    	
+
+
         double dist = grabDist * 2;
 		if (storm.isPet()) {
 			dist = 3F;
@@ -677,17 +639,16 @@ public class TornadoHelper {
 					if (getDistanceXZ(storm.posBaseFormationPos, entity1.getX(), entity1.getY(), entity1.getZ()) < dist)
 					{
 						if (!storm.isPet()) {
-							if (false/* && (entity1 instanceof EntityMovingBlock && !((EntityMovingBlock)entity1).collideFalling)*/) {
+							if (false) {
 								storm.spinEntity(entity1);
-								//spin(entity, conf, entity1);
+
 								foundEnt = true;
 							} else {
 								if (entity1 instanceof Player) {
-									//dont waste cpu on server side doing LOS checks, since player movement is client side only, in all situations ive seen
-									//actually we need to still change its motion var, otherwise weird things happen
-									//if (entity1.world.isClientSide()) {
+
+
 									if (WeatherUtilEntity.isEntityOutside(entity1) || (storm.isPlayerControlled() && WeatherUtilEntity.canPosSeePos(parWorld, entity1.position(), storm.posGround))) {
-										//Weather.dbg("entity1.motionY: " + entity1.motionY);
+
 										if (featherFallInstead) {
 											((Player) entity1).addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 600, 0, false, true, true));
 										} else {
@@ -695,17 +656,17 @@ public class TornadoHelper {
 										}
 										foundEnt = true;
 									}
-								} else if (entity1 instanceof LivingEntity && (WeatherUtilEntity.isEntityOutside(entity1, false) || (storm.isPlayerControlled() && WeatherUtilEntity.canPosSeePos(parWorld, entity1.position(), storm.posGround)))) {//OldUtil.canVecSeeCoords(parWorld, storm.pos, entity1.posX, entity1.posY, entity1.posZ)/*OldUtil.canEntSeeCoords(entity1, entity.posX, entity.posY + 80, entity.posZ)*/) {
-									//trying only server side to fix warp back issue (which might mean client and server are mismatching for some rules)
-									//if (!entity1.world.isClientSide()) {
+								} else if (entity1 instanceof LivingEntity && (WeatherUtilEntity.isEntityOutside(entity1, false) || (storm.isPlayerControlled() && WeatherUtilEntity.canPosSeePos(parWorld, entity1.position(), storm.posGround)))) {
+
+
 									if (featherFallInstead) {
 										((LivingEntity) entity1).addEffect(new MobEffectInstance(MobEffects.SLOW_FALLING, 600, 0, false, true, true));
 									} else {
 										storm.spinEntityv2(entity1);
 									}
-									//spin(entity, conf, entity1);
+
 									foundEnt = true;
-									//}
+
 								}
 							}
 						} else {
@@ -721,35 +682,35 @@ public class TornadoHelper {
 
         return foundEnt;
     }
-    
+
     public double getDistanceXZ(Vec3 parVec, double var1, double var3, double var5)
     {
         double var7 = parVec.x - var1;
-        //double var9 = ent.posY - var3;
+
         double var11 = parVec.z - var5;
-        return Mth.sqrt((float) (var7 * var7/* + var9 * var9*/ + var11 * var11));
+        return Mth.sqrt((float) (var7 * var7 + var11 * var11));
     }
-    
+
     public double getDistanceXZ(Entity ent, double var1, double var3, double var5)
     {
         double var7 = ent.getX() - var1;
-        //double var9 = ent.posY - var3;
+
         double var11 = ent.getZ() - var5;
-        return Mth.sqrt((float) (var7 * var7/* + var9 * var9*/ + var11 * var11));
+        return Mth.sqrt((float) (var7 * var7 + var11 * var11));
     }
-    
+
     @OnlyIn(Dist.CLIENT)
     public void soundUpdates(boolean playFarSound, boolean playNearSound)
     {
     	if (storm.isPet()) return;
     	Minecraft mc = Minecraft.getInstance();
-    	
+
         if (mc.player == null)
         {
             return;
         }
 
-        //close sounds
+
         int far = 200;
         int close = 120;
         if (storm.stormType == storm.TYPE_WATER) {
@@ -766,9 +727,9 @@ public class TornadoHelper {
 			}
 			close = 7;
 		}
-        
+
         double distToPlayer = this.storm.posGround.distanceTo(plPos);
-        
+
         float volScaleFar = (float) ((far - distToPlayer) / far);
         float volScaleClose = (float) ((close - distToPlayer) / close);
 
@@ -820,7 +781,7 @@ public class TornadoHelper {
         {
         	WeatherUtilSound.playMovingSound(storm, new StringBuilder().append("streaming." + sound[WeatherUtilSound.snd_rand[arrIndex]]).toString(), vol, 1.0F, parCutOffRange);
             int length = WeatherUtilSound.soundToLength.get(sound[WeatherUtilSound.snd_rand[arrIndex]]);
-            //-500L, for blending
+
             WeatherUtilSound.soundTimer[arrIndex] = System.currentTimeMillis() + length - 500L;
             WeatherUtilSound.snd_rand[arrIndex] = rand.nextInt(3);
         }

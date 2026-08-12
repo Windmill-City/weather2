@@ -26,7 +26,7 @@ public class ClientTickHandler
 	public static final ClientTickHandler INSTANCE = new ClientTickHandler();
 
 	public static Level lastWorld;
-	
+
 	public static WeatherManagerClient weatherManager;
 	public static SceneEnhancer sceneEnhancer;
 
@@ -45,7 +45,7 @@ public class ClientTickHandler
 	private static ParticleManagerExtended particleManagerExtended;
 
 	private ClientTickHandler() {
-		//this constructor gets called multiple times when created from proxy, this prevents multiple inits
+
 		if (sceneEnhancer == null) {
 			sceneEnhancer = new SceneEnhancer();
 			(new Thread(sceneEnhancer, "Weather2 Scene Enhancer")).start();
@@ -84,25 +84,24 @@ public class ClientTickHandler
 				mc.particleEngine.clearParticles();
 			}
 
-			//TODO: evaluate if best here
+
 			float windDir = WindReader.getWindAngle(world);
 			float windSpeed = WindReader.getWindSpeed(world, mc.player != null ? mc.player.blockPosition() : null);
 
-			//windDir = 0;
-			//TODO: ???????????? what is all this even affecting now
-			float diff = Math.abs(windDir - smoothAngle)/* - 180*/;
 
-			if (true && diff > 10/* && (smoothAngle > windDir - give || smoothAngle < windDir + give)*/) {
+			float diff = Math.abs(windDir - smoothAngle);
+
+			if (true && diff > 10) {
 
 				if (smoothAngle > 180) smoothAngle -= 360;
 				if (smoothAngle < -180) smoothAngle += 360;
 
 				float bestMove = Mth.wrapDegrees(windDir - smoothAngle);
 
-				smoothAngleAdj = windSpeed;//0.2F;
+				smoothAngleAdj = windSpeed;
 
-				if (Math.abs(bestMove) < 180/* - (angleAdjust * 2)*/) {
-					float realAdj = smoothAngleAdj;//Math.max(smoothAngleAdj, Math.abs(bestMove));
+				if (Math.abs(bestMove) < 180) {
+					float realAdj = smoothAngleAdj;
 
 					if (realAdj * 2 > windSpeed) {
 						if (bestMove > 0) {
@@ -123,7 +122,7 @@ public class ClientTickHandler
 					if (smoothAngleRotationalVelAccel > 0.3 || smoothAngleRotationalVelAccel < -0.3) {
 						smoothAngle += smoothAngleRotationalVelAccel * 0.3F;
 					} else {
-						//smoothAngleRotationalVelAccel *= 0.9F;
+
 					}
 
 					smoothAngleRotationalVelAccel *= 0.80F;
@@ -168,11 +167,11 @@ public class ClientTickHandler
 			particleManagerExtended.setLevel((ClientLevel) world);
 		}
 
-		//((IReloadableResourceManager)mc.getResourceManager()).addReloadListener(particleManagerExtended);
+
 		CompoundTag data = new CompoundTag();
 		data.putString("command", "syncFull");
 		data.putString("packetCommand", "WeatherData");
-		//Weather.eventChannel.sendToServer(PacketHelper.getNBTPacket(data, Weather.eventChannelName));
+
 		WeatherNetworking.HANDLER.sendTo(new PacketNBTFromClient(data), mc.player.connection.getConnection(), NetworkDirection.PLAY_TO_SERVER);
     }
 

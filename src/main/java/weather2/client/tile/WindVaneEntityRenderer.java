@@ -69,7 +69,7 @@ public class WindVaneEntityRenderer<T extends BlockEntity> implements BlockEntit
     public void render(T te, float partialTicks, PoseStack stack, MultiBufferSource buffer, int combinedLightIn, int combinedOverlayIn) {
         this.model.root().getAllParts().forEach(ModelPart::resetPose);
 
-        //fixes for block
+
         ModelPart root = this.model.root();
         root.x += 8;
         root.y += 8;

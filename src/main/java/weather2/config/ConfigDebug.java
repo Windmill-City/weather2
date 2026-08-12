@@ -8,7 +8,7 @@ import java.io.File;
 
 public class ConfigDebug implements IConfigCategory {
 
-    //public static int Particle_Reset_Frequency = 20*60*20;
+
     public static int Particle_Reset_Frequency = 0;
     public static boolean Particle_engine_render = true;
     public static boolean Particle_engine_tick = true;

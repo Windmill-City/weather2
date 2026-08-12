@@ -30,54 +30,50 @@ import java.util.Random;
 public class WindManager {
 	public WeatherManager manager;
 
-	//global
+
 	public float windAngleGlobal = 0;
 	public float windSpeedGlobal = 0;
 	public float windSpeedGlobalChangeRate = 0.05F;
 	public int windSpeedGlobalRandChangeTimer = 0;
 	public int windSpeedGlobalRandChangeDelay = 10;
 
-	//generic?
-	/*public float windSpeedMin = 0.00001F;
-	public float windSpeedMax = 1F;*/
 
-	//events - design derp, we're making this client side, so its set based on closest storm to the client side player
 	public float windAngleEvent = 0;
 	public BlockPos windOriginEvent = BlockPos.ZERO;
 	public float windSpeedEvent = 0;
-	//client side only
-	//its assumed this will get set by whatever initializes an event, and this class counts it down from a couple seconds, helps wind system know what takes priority
+
+
 	public int windTimeEvent = 0;
 
-	//gusts
+
 	public float windAngleGust = 0;
 	public float windSpeedGust = 0;
 	public int windTimeGust = 0;
-	//public float directionGust = 0;
-	//public float directionBeforeGust = 0;
+
+
 	public int windGustEventTimeRand = 60;
 	public float chanceOfWindGustEvent = 0.5F;
 
-	//low wind event
+
 	public int lowWindTimer = 0;
 
-	//high wind event
+
 	public int highWindTimer = 0;
 
 	public static boolean FORCE_ON_DEBUG_TESTING = false;
 
 	public HashMap<Long, WindInfoCache> lookupChunkToWindInfo = new HashMap<>();
-	//used to rotate through cached chunks, refreshing 1 chunk per tick
+
 	public int cachedChunkRefreshIndex = 0;
 
-	//used by client particles, and off thread work
+
 	public float cachedWindSpeedClient = 0;
 
 	public WindManager(WeatherManager parManager) {
 		manager = parManager;
-		
+
 		Random rand = new Random();
-		
+
 		windAngleGlobal = rand.nextInt(360);
 	}
 
@@ -88,7 +84,7 @@ public class WindManager {
 	public float getWindSpeed(@Nullable BlockPos pos) {
 		return getWindSpeed(pos, 1);
 	}
-	
+
 	public float getWindSpeed(@Nullable BlockPos pos, float extraHeightAmpMax) {
 		if (pos != null) {
 			return getWindSpeedPositional(pos, extraHeightAmpMax);
@@ -110,24 +106,16 @@ public class WindManager {
 		return getWindSpeedPositional(pos, extraHeightAmpMax, true);
 	}
 
-	/**
-	 * Uses various caches to factor in event wind speed (server side only), height based wind speed amplifier (cached to 16x16x16 areas)
-	 *
-	 * @param pos
-	 * @param extraHeightAmpMax
-	 * @return
-	 */
-	//TODO: design flaw: use of extraHeightAmpMax gets cached into WindInfoCache, will mess with results if 2 sources use 2 different extraHeightAmpMax
-	//workaround for now is that on server side, only turbine is using this cache, need to make the extraHeightAmpMax calculation outside the cache, by fixing the other hacks below
+
 	public float getWindSpeedPositional(BlockPos pos, float extraHeightAmpMax, boolean useClientCache) {
-		//if the cache is invalid, return 0 instead of executing the recalculation
+
 		if (manager.getWorld().isClientSide() && useClientCache) {
 			return cachedWindSpeedClient;
 		}
 		this.manager.getWorld().getProfiler().push("weather2_wind_calculation");
 		boolean eventFastest = false;
 		float lastWindSpeed;
-		//dont waste cpu on client using the cache system when we only need the info around the player, especially given all the particles using it
+
 		if (manager.getWorld().isClientSide()) {
 			lastWindSpeed = windTimeEvent > 0 ? windSpeedEvent : 0;
 		} else {
@@ -139,12 +127,12 @@ public class WindManager {
 		int averageHeight = getCachedAverageChunkHeightAround(pos);
 		float windSpeedHeightAmp = getWindSpeedAmplifierForHeight(pos.getY(), averageHeight, extraHeightAmpMax);
 		lastWindSpeed *= windSpeedHeightAmp;
-		//give a constant speed buff if high enough
+
 		if (windSpeedHeightAmp > 1.3F) {
 			lastWindSpeed += (windSpeedHeightAmp-1F) * 1F;
 		}
-		//TODO: remove the need for this hack, and eventFastest
-		//ok so i wanted the cap for turbines to be at 3, and everything else either 1 or 1.5 as shown above, this hacky if statement and event check will have to do for now
+
+
 		float cap = 1F;
 		if (eventFastest) {
 			cap = 2F;
@@ -194,11 +182,7 @@ public class WindManager {
 		}
 	}
 
-	/**
-	 * Returns angle in degrees, 0-360
-	 *
-	 * @return
-	 */
+
 	public float getWindAngleForEvents() {
 		return windAngleEvent;
 	}
@@ -213,20 +197,12 @@ public class WindManager {
 		}
 	}
 
-	/**
-	 * Returns angle in degrees, 0-360
-	 *
-	 * @return
-	 */
+
 	public float getWindAngleForGusts() {
 		return windAngleGust;
 	}
 
-	/**
-	 * Returns angle in degrees, 0-360
-	 *
-	 * @return
-	 */
+
 	public float getWindAngleForClouds() {
 		return windAngleGlobal;
 	}
@@ -237,27 +213,24 @@ public class WindManager {
 
 	public void setWindTimeEvent(int parVal) {
 		windTimeEvent = parVal;
-		//syncData(); - might be too often
-		//Weather.dbg("Wind event time set: " + parVal);
+
+
 	}
 
 	public void tick() {
 
 		Random rand = CoroUtilMisc.random();
 
-		//windSpeedGust = 0;
 
 		if (!ConfigWind.Misc_windOn) {
 			windSpeedGlobal = 0;
 			windSpeedGust = 0;
 			windTimeGust = 0;
-			//windSpeedSmooth = 0;
+
 		} else {
 
 			if (!manager.getWorld().isClientSide()) {
-				//WIND SPEED\\
 
-				//global random wind speed change
 
 				if (!ConfigWind.Wind_LowWindEvents) {
 					lowWindTimer = 0;
@@ -266,17 +239,17 @@ public class WindManager {
 				if (lowWindTimer <= 0) {
 					if (windSpeedGlobalRandChangeTimer-- <= 0)
 					{
-						//standard wind adjustment
+
 						if (highWindTimer <= 0) {
 							windSpeedGlobal += (rand.nextDouble() * windSpeedGlobalChangeRate) - (windSpeedGlobalChangeRate / 2);
-							//only increase for high wind
+
 						} else {
-							windSpeedGlobal += (rand.nextDouble() * windSpeedGlobalChangeRate)/* - (windSpeedGlobalChangeRate / 2)*/;
+							windSpeedGlobal += (rand.nextDouble() * windSpeedGlobalChangeRate);
 						}
 						windSpeedGlobalRandChangeTimer = windSpeedGlobalRandChangeDelay;
 					}
 
-					//only allow for low wind if high wind not active
+
 					if (highWindTimer <= 0) {
 						if (ConfigWind.Wind_LowWindEvents) {
 							if (rand.nextInt(ConfigWind.lowWindOddsTo1) == 0) {
@@ -285,7 +258,7 @@ public class WindManager {
 							}
 						}
 					} else {
-						//fix edge case where if a high wind event is manually started, low wind could still be trying to take control
+
 						stopLowWindEvent();
 					}
 
@@ -310,7 +283,7 @@ public class WindManager {
 					}
 				}
 
-				//enforce mins and maxs of wind speed
+
 				if (windSpeedGlobal < ConfigWind.windSpeedMin)
 				{
 					windSpeedGlobal = (float)ConfigWind.windSpeedMin;
@@ -341,31 +314,11 @@ public class WindManager {
 					windSpeedGlobal = speedOverride;
 				}
 
-				//smooth use
-				/*if (windSpeed > windSpeedSmooth)
-	            {
-					windSpeedSmooth += 0.01F;
-	            }
-	            else if (windSpeed < windSpeedSmooth)
-	            {
-	            	windSpeedSmooth -= 0.01F;
-	            }
-
-	            if (windSpeedSmooth < 0)
-	            {
-	            	windSpeedSmooth = 0F;
-	            }*/
-
-				//WIND SPEED //
-
-				//WIND ANGLE\\
-
-				//windGustEventTimeRand = 100;
 
 				float randGustWindFactor = 1F;
 
-				//gust data
-				if (this.windTimeGust == 0 && lowWindTimer <= 0/* && highWindTimer <= 0*/)
+
+				if (this.windTimeGust == 0 && lowWindTimer <= 0)
 				{
 					if (chanceOfWindGustEvent > 0F)
 					{
@@ -380,20 +333,15 @@ public class WindManager {
 							}
 
 							setWindTimeGust(rand.nextInt(windGustEventTimeRand * 3));
-							//windEventTime += windTime;
-							//unneeded since priority system determines wind to use
-							//directionBeforeGust = windAngleGlobal;
+
+
 						}
 					}
 				}
 
-				//global wind angle
-				//windAngleGlobal += ((new Random()).nextInt(5) - 2) * 0.2F;
+
 				windAngleGlobal += (rand.nextFloat() * ConfigWind.globalWindAngleChangeAmountRate) - (rand.nextFloat() * ConfigWind.globalWindAngleChangeAmountRate);
 
-				//windAngleGlobal += 0.1;
-
-				//windAngleGlobal = 0;
 
 				if (windAngleGlobal < -180)
 				{
@@ -405,7 +353,6 @@ public class WindManager {
 					windAngleGlobal -= 360;
 				}
 
-				//WIND ANGLE //
 
 				refreshWindInfoOneChunk();
 			} else {
@@ -414,8 +361,6 @@ public class WindManager {
 			}
 		}
 
-		/*windSpeedGlobal = 0.9F;
-		windAngleGlobal = 270;*/
 
 	}
 
@@ -430,7 +375,7 @@ public class WindManager {
 			}
 		}
 
-		//event data
+
 		if (entP != null) {
 
 			if (entP != null && entP.level().getGameTime() % 5 == 0) {
@@ -447,7 +392,7 @@ public class WindManager {
 
 					setWindTimeEvent(80);
 
-					//player pos aiming at storm
+
 					double var11 = so.posGround.x - entP.getX();
 					double var15 = so.posGround.z - entP.getZ();
 					float yaw = -((float)Math.atan2(var11, var15)) * 180.0F / (float)Math.PI;
@@ -477,9 +422,7 @@ public class WindManager {
 		}
 	}
 
-	/**
-	 * Refreshes 1 cached chunk per tick, rotating through the cached chunks so all stay fresh without time based expiry
-	 */
+
 	public void refreshWindInfoOneChunk() {
 		if (lookupChunkToWindInfo.isEmpty()) {
 			return;
@@ -524,12 +467,7 @@ public class WindManager {
 		return cache.averageChunkHeightAround;
 	}
 
-	/**
-	 * Gets heights around the chunk in middle of each chunk checked, stepping out 'squareRadius' times, each check spaced out by 'scanSpacing' chunks
-	 *
-	 * @param chunkPos
-	 * @return
-	 */
+
 	public int calculateAverageChunkHeightAround(BlockPos chunkPos) {
 		int squareRadius = 2;
 		int scanSpacing = 3;
@@ -547,26 +485,13 @@ public class WindManager {
 		}
 		if (count == 0) return -64;
 		int avgHeight = totalHeight / count;
-		//System.out.println("avgHeight: " + avgHeight);
+
 		return avgHeight;
 	}
 
-	/**
-	 *	Get an amp between average height found in area and max build height
-	 *
-	 *  averageHeight is the bottom
-	 *  getMaxBuildHeight is top
-	 *  height is somewhere in between
-	 *
-	 *  dimensions with smaller range between base height and max build height are easier to benefit from, less height needed
-	 *  this is the best option imo considering the alternatives
-	 *
-	 * @param height
-	 * @param averageHeight
-	 * @return
-	 */
+
 	public float getWindSpeedAmplifierForHeight(int height, int averageHeight, float extraHeightAmpMax) {
-		//prevent weird math using negative numbers
+
 		int maxSpeedHeight = manager.getWorld().getHeight();
 		if (manager.getWorld().getMinBuildHeight() < 0) {
 			int heightAdj = Math.abs(manager.getWorld().getMinBuildHeight());
@@ -582,38 +507,25 @@ public class WindManager {
 		applyWindForceNew(ent, multiplier, maxSpeed, true);
 	}
 
-	/**
-	 * 
-	 * To solve the problem of speed going overkill due to bad formulas
-	 * 
-	 * end goal: make object move at speed of wind
-	 * - object has a weight that slows that adjustment
-	 * - conservation of momentum
-	 * 
-	 * calculate force based on wind speed vs objects speed
-	 * - use that force to apply to weight of object
-	 * - profit
-	 */
+
 	public void applyWindForceNew(Object ent, float multiplier, float maxSpeed, boolean dynamicWind) {
 
 		Vec3 pos = new Vec3(CoroUtilEntOrParticle.getPosX(ent), CoroUtilEntOrParticle.getPosY(ent), CoroUtilEntOrParticle.getPosZ(ent));
 
 		Vec3 motion = applyWindForceImpl(pos, new Vec3(CoroUtilEntOrParticle.getMotionX(ent), CoroUtilEntOrParticle.getMotionY(ent), CoroUtilEntOrParticle.getMotionZ(ent)),
 				WeatherUtilEntity.getWeight(ent), multiplier, maxSpeed, dynamicWind);
-		
+
 		CoroUtilEntOrParticle.setMotionX(ent, motion.x);
     	CoroUtilEntOrParticle.setMotionZ(ent, motion.z);
 	}
-	
-	/**
-	 * Handle generic uses of wind force, for stuff like weather objects that arent entities or paticles
-	 */
+
+
 	public Vec3 applyWindForceImpl(Vec3 pos, Vec3 motion, float weight, float multiplier, float maxSpeed, boolean dynamicWind) {
 		float windSpeed = 0;
 		if (pos != null && ConfigWind.Wind_UsePerlinNoise) {
-			/*if (windTimeGust > 0) {
-				windSpeed = getWindSpeedPerlinNoise(pos);
-			} else */{
+
+
+{
 				windSpeed = (getWindSpeed(dynamicWind ? CoroUtilBlock.blockPos(pos) : null) * 0.5F) + (getWindSpeedPerlinNoise(pos) * 0.5F);
 			}
 		} else {
@@ -623,29 +535,29 @@ public class WindManager {
 
     	float windX = (float) -Math.sin(Math.toRadians(windAngle)) * windSpeed;
     	float windZ = (float) Math.cos(Math.toRadians(windAngle)) * windSpeed;
-    	
+
     	float objX = (float) motion.x;
     	float objZ = (float) motion.z;
-		
+
     	float windWeight = 1F;
     	float objWeight = weight;
-    	
-    	//divide by zero protection
+
+
     	if (objWeight <= 0) {
     		objWeight = 0.001F;
     	}
 
     	float weightDiff = windWeight / objWeight;
-    	
+
     	float vecX = (objX - windX) * weightDiff;
     	float vecZ = (objZ - windZ) * weightDiff;
-    	
+
     	vecX *= multiplier;
     	vecZ *= multiplier;
-    	
-    	//copy over existing motion data
+
+
     	Vec3 newMotion = motion;
-    	
+
     	double speedCheck = (Math.abs(vecX) + Math.abs(vecZ)) / 2D;
         if (speedCheck < maxSpeed) {
         	newMotion = new Vec3(objX - vecX, motion.y, objZ - vecZ);
@@ -653,23 +565,19 @@ public class WindManager {
         	float speedDampen = (float)(maxSpeed / speedCheck);
 			newMotion = new Vec3(objX - vecX*speedDampen, motion.y, objZ - vecZ*speedDampen);
 		}
-        
+
         return newMotion;
 	}
 
 	public CompoundTag nbtSyncForClient() {
 		CompoundTag data = new CompoundTag();
 
-		//idea: only sync the wind data client cares about (the active priority wind)
 
 		data.putFloat("windSpeedGlobal", windSpeedGlobal);
 		data.putFloat("windAngleGlobal", windAngleGlobal);
 		data.putFloat("windSpeedGust", windSpeedGust);
 		data.putFloat("windAngleGust", windAngleGust);
 
-		/*data.putFloat("windSpeedEvent", windSpeedEvent);
-		data.putFloat("windAngleEvent", windAngleEvent);
-		data.putInt("windTimeEvent", windTimeEvent);*/
 
 		data.putInt("windTimeGust", windTimeGust);
 
@@ -683,9 +591,6 @@ public class WindManager {
 		windSpeedGust = parNBT.getFloat("windSpeedGust");
 		windAngleGust = parNBT.getFloat("windAngleGust");
 
-		/*windSpeedEvent = parNBT.getFloat("windSpeedEvent");
-		windAngleEvent = parNBT.getFloat("windAngleEvent");
-		windTimeEvent = parNBT.getInt("windTimeEvent");*/
 
 		windTimeGust = parNBT.getInt("windTimeGust");
 	}
@@ -744,14 +649,14 @@ public class WindManager {
 
 	public float getWindSpeedPerlinNoise(Vec3 pos) {
 		PerlinNoise perlinNoise = PerlinNoiseHelper.get().getPerlinNoise();
-		/*int indexX = index % xWide;
-		int indexZ = index / xWide;*/
+
+
 		int indexX = (int) Math.floor(pos.x);
 		int indexZ = (int) Math.floor(pos.z);
 		double scale = 10;
 		long time = Minecraft.getInstance().level.getGameTime() * 2;
 		double posYAdj = 0;
-		double noiseVal = perlinNoise.getValue(((indexX) * scale) + time, ((indexZ) * scale) + time, posYAdj)/* + 0.2F*/;
+		double noiseVal = perlinNoise.getValue(((indexX) * scale) + time, ((indexZ) * scale) + time, posYAdj);
 		return (float) Math.max(-1.5F, Math.min(1.5F, noiseVal * 4F));
 	}
 

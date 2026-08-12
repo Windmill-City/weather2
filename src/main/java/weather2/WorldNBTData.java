@@ -35,7 +35,7 @@ public class WorldNBTData extends SavedData {
     }
 
     @Override
-    //backwards compat, the data is always changing
+
     public boolean isDirty() {
         return true;
     }

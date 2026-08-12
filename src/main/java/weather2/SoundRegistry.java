@@ -43,14 +43,14 @@ public class SoundRegistry {
 		register("streaming.siren_sandstorm_4");
 		register("streaming.siren_sandstorm_5_extra");
 		register("streaming.siren_sandstorm_6_extra");
-		
+
 	}
 
 	public static void register(String soundPath) {
 		ResourceLocation resLoc = new ResourceLocation(Weather.MODID, soundPath);
-		//SoundEvent event = new SoundEvent(resLoc).setRegistryName(resLoc);
+
 		SoundEvent event = SoundEvent.createVariableRangeEvent(resLoc);
-		//TODO: WIP SoundEvent event = SoundEvent.createVariableRangeEvent(resLoc).setRegistryName(resLoc);
+
 		ForgeRegistries.SOUND_EVENTS.register(resLoc, event);
 		if (lookupStringToEvent.containsKey(soundPath)) {
 			System.out.println("WEATHER SOUNDS WARNING: duplicate sound registration for " + soundPath);

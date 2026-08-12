@@ -2,13 +2,11 @@ package weather2.weathersystem.tornado;
 
 import net.minecraft.nbt.CompoundTag;
 
-/**
- * Defines the shape and other characteristics of a tornado
- */
+
 public class ActiveTornadoConfig {
 
     private float radiusOfBase;
-    //incremental size of radius per layer
+
     private float radiusIncreasePerLayer;
     private float height;
     private float spinSpeed;

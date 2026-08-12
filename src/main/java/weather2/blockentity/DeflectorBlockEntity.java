@@ -38,7 +38,7 @@ public class DeflectorBlockEntity extends BlockEntity {
     public void blockBroken() {
         WeatherManagerServer weatherManagerServer = ServerTickHandler.getWeatherManagerFor(level);
         if (weatherManagerServer != null) {
-            //CULog.dbg("removing weather deflector poi at " + getBlockPos());
+
             weatherManagerServer.removeDeflector(getBlockPos());
         }
     }

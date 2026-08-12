@@ -23,11 +23,7 @@ public class PacketNBTFromServer {
 
     public static class Handler {
         public static void handle(final PacketNBTFromServer msg, Supplier<NetworkEvent.Context> ctx) {
-            /*ServerPlayerEntity playerEntity = ctx.get().getSender();
-            if( playerEntity == null ) {
-                ctx.get().setPacketHandled(true);
-                return;
-            }*/
+
 
             ctx.get().enqueueWork(() -> {
                 try {
@@ -36,11 +32,11 @@ public class PacketNBTFromServer {
                     String packetCommand = nbt.getString("packetCommand");
                     String command = nbt.getString("command");
 
-                    //System.out.println("Weather2 packet command from server: " + packetCommand);
+
                     if (packetCommand.equals("WeatherData")) {
                         ClientTickHandler.getClientWeather();
 
-                        //this line still gets NPE's despite it checking if its null right before it, wtf
+
                         ClientTickHandler.weatherManager.nbtSyncFromServer(nbt);
                     } else if (packetCommand.equals("ClientConfigData")) {
                         if (command.equals("syncUpdate")) {

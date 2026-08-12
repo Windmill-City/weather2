@@ -8,16 +8,11 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 
-/**
- * Particle that has a secondary rotation with a 1 dimensional pivot point.
- * For rotating particles around a point with nice rotational interpolation.
- */
-
 public class PivotingParticle extends ParticleTexFX {
 
     private Vec3 pivot = new Vec3(0, 0, 0);
     private Vec3 pivotPrev = new Vec3(0, 0, 0);
-    //in degrees
+
     private Vec3 pivotRot = new Vec3(0, 0, 0);
     private Vec3 pivotRotPrev = new Vec3(0, 0, 0);
 
@@ -30,14 +25,7 @@ public class PivotingParticle extends ParticleTexFX {
         super.tick();
     }
 
-    /**
-     * Get coordinates for pivoted rotation
-     * For now we'll just do a rotation around the y axis
-     * if we need to do full 3d pivoting, use a rotation matrix with quaternion and make use of the full vectors
-     *
-     * @param partialTicks
-     * @return
-     */
+
     @Override
     public Vec3 getPivotedPosition(float partialTicks) {
         Vec3 pivotLerped = pivotPrev.lerp(pivot, partialTicks);

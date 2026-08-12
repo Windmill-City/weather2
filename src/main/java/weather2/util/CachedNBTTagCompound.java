@@ -2,13 +2,7 @@ package weather2.util;
 
 import net.minecraft.nbt.CompoundTag;
 
-/**
- * Caches nbt data to remove redundant data sending over network
- *
- * @author cosmicdan
- *
- * revisions made to further integrate it into the newer design of WeatherObjects
- */
+
 public class CachedNBTTagCompound {
 	private CompoundTag newData;
 	private CompoundTag cachedData;
@@ -136,7 +130,7 @@ public class CachedNBTTagCompound {
 		return newData.getCompound(key);
 	}
 
-	/** warning, not cached **/
+
 	public void put(String key, CompoundTag tag) {
 		newData.put(key, tag);
 		cachedData.put(key, tag);

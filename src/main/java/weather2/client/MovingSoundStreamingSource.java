@@ -32,7 +32,7 @@ public class MovingSoundStreamingSource extends AbstractTickableSoundInstance {
 		tick();
 	}
 
-	//constructor for non moving sounds
+
 	public MovingSoundStreamingSource(Vec3 parPos, SoundEvent event, SoundSource category, float parVolume, float parPitch, float parCutOffRange)
 	{
 		super(event, category, SoundInstance.createUnseededRandom());
@@ -43,11 +43,11 @@ public class MovingSoundStreamingSource extends AbstractTickableSoundInstance {
 		cutOffRange = parCutOffRange;
 		realSource = parPos;
 
-		//sync position
+
 		tick();
 	}
 
-	//constructor for moving sounds
+
 	public MovingSoundStreamingSource(StormObject parStorm, SoundEvent event, SoundSource category, float parVolume, float parPitch, float parCutOffRange)
 	{
 		super(event, category, SoundInstance.createUnseededRandom());
@@ -58,7 +58,7 @@ public class MovingSoundStreamingSource extends AbstractTickableSoundInstance {
 		this.pitch = parPitch;
 		cutOffRange = parCutOffRange;
 
-		//sync position
+
 		tick();
 	}
 
@@ -76,7 +76,7 @@ public class MovingSoundStreamingSource extends AbstractTickableSoundInstance {
 			realSource = this.storm.posGround;
 		}
 
-		//if locked to player, don't dynamically adjust volume
+
 		if (!lockToPlayer) {
 			double dist = getDistanceFrom(realSource, entP.position());
 			if (dist > cutOffRange) {
@@ -84,7 +84,7 @@ public class MovingSoundStreamingSource extends AbstractTickableSoundInstance {
 			} else {
 				volume = (float) (1F - (dist / cutOffRange)) * extraVolumeAdjForDistScale;
 			}
-			//CULog.dbg("sound: " + this.location + " vol: " + volume + " cutOffRange: " + cutOffRange + " dist: " + dist);
+
 		}
 
 	}

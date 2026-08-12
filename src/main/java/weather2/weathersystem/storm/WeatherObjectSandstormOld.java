@@ -24,24 +24,24 @@ public class WeatherObjectSandstormOld extends WeatherObject {
 	public int maxAge = 20*20;
 
 	public Random rand = new Random();
-	
+
 	public WeatherObjectSandstormOld(WeatherManager parManager) {
 		super(parManager);
-		
+
 		this.weatherObjectType = EnumWeatherObjectType.SAND;
 	}
-	
+
 	public void initSandstormSpawn(Vec3 pos) {
 		this.pos = pos;
 		this.maxAge = 20*60*5;
 	}
-	
+
 	public static boolean isDesert(Biome biome) {
 		return isDesert(biome, false);
 	}
 
 	public static boolean isDesert(Biome biome, boolean forSpawn) {
-		//TODO: make sure new comparison works
+
 		if (ForgeRegistries.BIOMES.getKey(biome) == null) return false;
 		return biome.equals(Biomes.DESERT) || (!forSpawn && biome.equals(Biomes.RIVER)) || ForgeRegistries.BIOMES.getKey(biome).toString().toLowerCase().contains("desert");
 	}
@@ -49,14 +49,14 @@ public class WeatherObjectSandstormOld extends WeatherObject {
 	public int getSize() {
 		return 250;
 	}
-	
+
 	@Override
 	public void tick() {
 		super.tick();
 
 		if (!manager.getWorld().isClientSide()) {
 			this.age++;
-			//CULog.dbg("this.age: " + this.age);
+
 			if (this.age > this.maxAge) {
 				this.remove();
 			}
@@ -69,10 +69,7 @@ public class WeatherObjectSandstormOld extends WeatherObject {
 		posGround = pos;
 	}
 
-	/**
-	 * 0-1F for first half of age, 1-0F for second half of age
-	 * @return
-	 */
+
 	public float getIntensity() {
 		float age = this.age;
 		float maxAge = this.maxAge;
@@ -95,17 +92,17 @@ public class WeatherObjectSandstormOld extends WeatherObject {
 
 		float angle = windMan.getWindAngleForClouds();
 
-		//keep it set to do a lot of work only occasionally, prevents chunk render tick spam for client which kills fps
+
 		int delay = ConfigSand.Sandstorm_Sand_Buildup_TickRate;
 		int loop = (int)((float)ConfigSand.Sandstorm_Sand_Buildup_LoopAmountBase * getIntensity());
 
-		//sand block buildup
+
 		if (!world.isClientSide) {
 			if (world.getGameTime() % delay == 0) {
 
 				for (int i = 0; i < loop; i++) {
 
-					//rate of placement based on storm intensity
+
 					if (rand.nextDouble() >= getIntensity()) continue;
 
 					Vec3 vecPos = getRandomPosInSandstorm();
@@ -114,7 +111,7 @@ public class WeatherObjectSandstormOld extends WeatherObject {
 
 					BlockPos blockPos = CoroUtilBlock.blockPos(vecPos.x, y, vecPos.z);
 
-					//avoid unloaded areas
+
 					if (!world.hasChunkAt(blockPos)) continue;
 
 					Biome biomeIn = world.getBiome(blockPos).get();
@@ -135,12 +132,12 @@ public class WeatherObjectSandstormOld extends WeatherObject {
 		Vec3 vec = new Vec3(x, y, z);
 		return vec;
 	}
-	
+
 	@Override
 	public int getUpdateRateForNetwork() {
 		return 100;
 	}
-	
+
 	@Override
 	public void nbtSyncForClient() {
 		super.nbtSyncForClient();
@@ -148,7 +145,7 @@ public class WeatherObjectSandstormOld extends WeatherObject {
 		data.putInt("age", age);
 		data.putInt("maxAge", maxAge);
 	}
-	
+
 	@Override
 	public void nbtSyncFromServer() {
 		super.nbtSyncFromServer();

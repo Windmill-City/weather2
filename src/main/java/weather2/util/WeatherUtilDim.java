@@ -27,7 +27,7 @@ public class WeatherUtilDim {
     }
 
     public static int getSeaLevel(Level world) {
-        //TODO: sync customizable sea level to client, also use World.getSeaLevel if logical server
+
         return 63;
     }
 

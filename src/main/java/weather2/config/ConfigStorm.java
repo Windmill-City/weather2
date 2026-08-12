@@ -10,7 +10,6 @@ import java.io.File;
 public class ConfigStorm implements IConfigCategory {
 
 
-
     public static int Storm_OddsTo1OfHighWindWaterSpout = 150;
 	public static boolean Storm_FlyingBlocksHurt = true;
 	public static int Storm_MaxPerPlayerPerLayer = 20;
@@ -24,14 +23,13 @@ public class ConfigStorm implements IConfigCategory {
 	public static int Storm_Rain_WaterBuildUpOddsTo1FromSource = 15;
 	public static int Storm_Rain_WaterBuildUpOddsTo1FromNothing = 100;
 	public static int Storm_Rain_WaterBuildUpOddsTo1FromOvercastRaining = 30;
-	//public static int Storm_Rain_WaterBuildUp = 150;
+
 	public static double Storm_TemperatureAdjustRate = 0.1D;
-	//public static double Storm_Deadly_MinIntensity = 5.3D;
+
 	public static int Storm_HailPerTick = 10;
 	public static int Storm_OddsTo1OfOceanBasedStorm = 300;
-	//public static int Storm_OddsTo1OfLandBasedStorm = -1;
-	//public static int Storm_OddsTo1OfProgressionBase = 15;
-	//public static int Storm_OddsTo1OfProgressionStageMultiplier = 3;
+
+
 	public static int Storm_PercentChanceOf_HighWind = 90;
 	public static int Storm_PercentChanceOf_Hail = 80;
 	public static int Storm_PercentChanceOf_F0_Tornado = 70;
@@ -48,12 +46,12 @@ public class ConfigStorm implements IConfigCategory {
 	@ConfigComment("Also known as full blown hurricane")
 	public static int Storm_PercentChanceOf_C5_Cyclone = 10;
 	public static int Storm_ParticleSpawnDelay = 3;
-	
-	//per player storm settings
+
+
 	public static int Player_Storm_Deadly_OddsTo1 = 30;
-	public static int Player_Storm_Deadly_TimeBetweenInTicks = 20*60*20*3; //3 mc days
-	
-	//per server storm settings
+	public static int Player_Storm_Deadly_TimeBetweenInTicks = 20*60*20*3;
+
+
 	public static boolean Server_Storm_Deadly_UseGlobalRate = true;
 	@ConfigComment("Used if Server_Storm_Deadly_UseGlobalRate is on, replaces use of Player_Storm_Deadly_OddsTo1")
 	public static int Server_Storm_Deadly_OddsTo1 = 30;
@@ -63,14 +61,14 @@ public class ConfigStorm implements IConfigCategory {
 	@ConfigComment("For areas without the right mix of hot and cold biomes")
 	public static int Player_Storm_Deadly_OddsTo1_Land_Based = 1200;
 	@ConfigComment("For areas without the right mix of hot and cold biomes")
-	public static int Player_Storm_Deadly_TimeBetweenInTicks_Land_Based = 20*60*20*10; //10 mc days
+	public static int Player_Storm_Deadly_TimeBetweenInTicks_Land_Based = 20*60*20*10;
 	@ConfigComment("Used if Server_Storm_Deadly_UseGlobalRate is on, for areas without the right mix of hot and cold biomes")
 	public static int Server_Storm_Deadly_OddsTo1_Land_Based = 1200;
 	@ConfigComment("Used if Server_Storm_Deadly_UseGlobalRate is on, for areas without the right mix of hot and cold biomes")
-	public static int Server_Storm_Deadly_TimeBetweenInTicks_Land_Based = 20*60*20*10; //10 mc days
+	public static int Server_Storm_Deadly_TimeBetweenInTicks_Land_Based = 20*60*20*10;
 
 	public static boolean preventServerThunderstorms = true;
-	//lightning
+
 	public static int Lightning_OddsTo1OfFire = 20;
 	public static int Lightning_lifetimeOfFire = 3;
 	public static int Lightning_DistanceToPlayerForEffects = 256;
@@ -84,8 +82,7 @@ public class ConfigStorm implements IConfigCategory {
     public static boolean Storm_Deflector_RemoveRainstorms = false;
     public static boolean Storm_Deflector_RemoveSandstorms = true;
 
-	/*@ConfigComment("Minimum amount of visual rain shown when its raining globally during overcast mode")
-    public static double Storm_Rain_Overcast_Amount = 0.01D;*/
+
 	public static int Storm_Rain_Overcast_OddsTo1 = 50;
 
 	public static int Storm_Rain_OddsTo1 = 150;

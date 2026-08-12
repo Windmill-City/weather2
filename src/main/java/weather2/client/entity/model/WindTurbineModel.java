@@ -1,6 +1,4 @@
-package weather2.client.entity.model;// Made with Blockbench 4.8.3
-// Exported for Minecraft version 1.17 or later with Mojang mappings
-// Paste this class into your mod and generate all required imports
+package weather2.client.entity.model;
 
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -15,7 +13,7 @@ import net.minecraft.world.entity.Entity;
 import weather2.Weather;
 
 public class WindTurbineModel<T extends Entity> extends HierarchicalModel<T> {
-	// This layer location should be baked with EntityRendererProvider.Context in the entity renderer and passed into this model's constructor
+
 	public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(new ResourceLocation(Weather.MODID, "wind_turbine"), "main");
 	private final ModelPart root;
 

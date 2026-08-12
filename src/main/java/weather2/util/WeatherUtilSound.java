@@ -13,10 +13,7 @@ import weather2.weathersystem.storm.StormObject;
 import java.util.HashMap;
 import java.util.Random;
 
-/**
- * TODO: rewrite this to use a class that contains array of sounds, amount of them, length of them, and the last played time and next random index
- * would help cleanup the weird array use this class does
- */
+
 public class WeatherUtilSound {
 
     public static String snd_tornado_dmg_close[] = new String[3];
@@ -27,12 +24,10 @@ public class WeatherUtilSound {
     public static String snd_sandstorm_high[] = new String[1];
     public static HashMap<String, Integer> soundToLength = new HashMap<>();
 
-    /**
-     * These need to match the amount of array'd strings we use for sounds, was 3, now 6 for sandstorm addition
-     */
+
     public static int snd_rand[] = new int[6];
     public static long soundTimer[] = new long[6];
-    
+
     public static void init() {
     	Random rand = new Random();
     	snd_tornado_dmg_close[0] = "destruction_0_";
@@ -55,9 +50,8 @@ public class WeatherUtilSound {
         snd_rand[3] = rand.nextInt(snd_sandstorm_high.length);
         snd_rand[4] = rand.nextInt(snd_sandstorm_med.length);
         snd_rand[5] = rand.nextInt(snd_sandstorm_low.length);
-        /*soundID[0] = -1;
-        soundID[1] = -1;
-        soundID[2] = -1;*/
+
+
         soundToLength.put(snd_tornado_dmg_close[0], 2515);
         soundToLength.put(snd_tornado_dmg_close[1], 2580);
         soundToLength.put(snd_tornado_dmg_close[2], 2741);
@@ -83,9 +77,9 @@ public class WeatherUtilSound {
     @OnlyIn(Dist.CLIENT)
     public static void playNonMovingSound(Vec3 parPos, String var1, float parVolume, float parPitch, float parCutOffRange)
     {
-        //String prefix = "streaming.";
+
         String affix = ".ogg";
-        //ResourceLocation res = new ResourceLocation(var1);
+
         SoundEvent event = SoundRegistry.get(var1);
         MovingSoundStreamingSource sound = new MovingSoundStreamingSource(parPos, event, SoundSource.WEATHER, parVolume, parPitch, parCutOffRange);
         Minecraft.getInstance().getSoundManager().play(sound);
@@ -94,10 +88,10 @@ public class WeatherUtilSound {
     @OnlyIn(Dist.CLIENT)
     public static void playMovingSound(StormObject parStorm, String var1, float parVolume, float parPitch, float parCutOffRange)
     {
-        //String prefix = "streaming.";
+
         String affix = ".ogg";
 
-        //ResourceLocation res = new ResourceLocation(var1);
+
         SoundEvent event = SoundRegistry.get(var1);
 
         try {
@@ -105,7 +99,7 @@ public class WeatherUtilSound {
 
             Minecraft.getInstance().getSoundManager().play(sound);
         } catch (Exception ex) {
-            //catching annoying 'java.lang.NoClassDefFoundError: weather2/client/MovingSoundStreamingSource' crash when hot reloading in dev
+
             ex.printStackTrace();
         }
 

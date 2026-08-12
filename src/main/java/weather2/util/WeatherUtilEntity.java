@@ -29,7 +29,7 @@ import net.minecraftforge.fml.util.thread.EffectiveSide;
 import java.util.HashMap;
 
 public class WeatherUtilEntity {
-	
+
     public static float getWeight(Object entity1, boolean forTornado)
     {
     	Level world = CoroUtilEntOrParticle.getWorld(entity1);
@@ -64,7 +64,7 @@ public class WeatherUtilEntity {
             else {
             	airTime++;
             }
-        	
+
         	livingEnt.getPersistentData().putInt("timeInAir", airTime);
 
 			if (entity1 instanceof Player) {
@@ -174,7 +174,7 @@ public class WeatherUtilEntity {
 
 		return 1F;
 	}
-    
+
     public static boolean isParticleRotServerSafe(Level world, Object obj) {
     	if (EffectiveSide.get().equals(LogicalSide.SERVER)) {
     		return false;
@@ -182,11 +182,11 @@ public class WeatherUtilEntity {
     	if (!world.isClientSide) return false;
     	return isParticleRotClientCheck(obj);
     }
-    
+
     public static boolean isParticleRotClientCheck(Object obj) {
     	return obj instanceof EntityRotFX;
     }
-    
+
     public static double getDistanceSqEntToPos(Entity ent, BlockPos pos) {
     	return ent.position().distanceToSqr(Vec3.atCenterOf(pos));
     }
@@ -213,7 +213,7 @@ public class WeatherUtilEntity {
 
 		int rangeCheck = 5;
 		int yOffset = 0;
-		//start 1 block away from start position to avoid colliding with self when used for a block
+
 		int xzInitialOffset = 1;
 
 		boolean nsCheck = false;
@@ -267,7 +267,7 @@ public class WeatherUtilEntity {
 		BlockHitResult blockhitresult = parWorld.clip(new ClipContext(parPos, parCheckPos, ClipContext.Block.VISUAL, ClipContext.Fluid.NONE, null));
 		if (blockhitresult.getType() == HitResult.Type.MISS) {
 			int height = WeatherUtilBlock.getPrecipitationHeightSafe(parWorld, new BlockPos(Mth.floor(parCheckPos.x), 0, Mth.floor(parCheckPos.z))).getY();
-			//System.out.println("height: " + height + " vs " + parCheckPos.y);
+
 			if (height < parCheckPos.y) {
 				return true;
 			}

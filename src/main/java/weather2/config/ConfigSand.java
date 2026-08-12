@@ -13,7 +13,7 @@ public class ConfigSand implements IConfigCategory {
     @ConfigComment("Takes the sand out of sandwiches")
     public static boolean Storm_NoSandstorms = false;
 
-	//sandstorm settings
+
 	public static boolean Sandstorm_UseGlobalServerRate = false;
 	public static int Sandstorm_OddsTo1 = 30;
 	@ConfigComment("Time between sandstorms for either each player or entire server depending on if global rate is on, default: 3 client days")
@@ -32,7 +32,7 @@ public class ConfigSand implements IConfigCategory {
     public static boolean Sandstorm_Sand_Buildup_AllowOutsideDesert = true;
 
     public static double Sandstorm_Particle_Dust_effect_rate = 0.6D;
-    //public static double Precipitation_Particle_effect_rate = 0.7D;
+
     public static double Sandstorm_Particle_Debris_effect_rate = 0.6D;
 
     public static boolean Sandstorm_Siren_PleaseNoDarude = false;

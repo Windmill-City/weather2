@@ -25,7 +25,6 @@ import java.util.Random;
 @OnlyIn(Dist.CLIENT)
 public class WeatherManagerClient extends WeatherManager {
 
-	//public CloudManager cloudManager = new CloudManager();
 
 	public WeatherManagerClient(ResourceKey<Level> dimension) {
 		super(dimension);
@@ -35,22 +34,14 @@ public class WeatherManagerClient extends WeatherManager {
 	public void tick() {
 		super.tick();
 		if (!Weather.isLoveTropicsInstalled()) {
-			//TODO: disabled for 1.20, might need to go mixin from here
-			/*ICloudRenderHandler cloudRenderHandler = ((ClientLevel) getWorld()).effects().getCloudRenderHandler();
-			if (cloudRenderHandler == null) {
-				((ClientLevel) getWorld()).effects().setCloudRenderHandler(new CloudRenderHandler());
-			}
-			IWeatherParticleRenderHandler handler = ((ClientLevel) getWorld()).effects().getWeatherParticleRenderHandler();
-			if (handler == null) {
-				((ClientLevel) getWorld()).effects().setWeatherParticleRenderHandler(new WeatherParticleRenderHandler());
-			}*/
+
 
 			boolean cloudTest = false;
 			if (cloudTest) {
-				//cloudManager.tick();
+
 			}
 		}
-		//((ClientLevel)getWorld()).effects().setCloudRenderHandler(null);
+
 
 	}
 
@@ -60,20 +51,12 @@ public class WeatherManagerClient extends WeatherManager {
 	}
 
 	public void nbtSyncFromServer(CompoundTag parNBT) {
-		//check command
-		//commands:
-		//new storm
-		//tick storm
-		//remove storm
 
-		//new volcano
-		//tick volcano
-		//remove volcano???
 
 		String command = parNBT.getString("command");
 
 		if (command.equals("syncStormNew")) {
-			//Weather.dbg("creating client side storm");
+
 			CompoundTag stormNBT = parNBT.getCompound("data");
 			long ID = stormNBT.getLong("ID");
 			Weather.dbg("syncStormNew, ID: " + ID);
@@ -91,7 +74,7 @@ public class WeatherManagerClient extends WeatherManager {
 				((WeatherObjectParticleStorm)wo).setType(WeatherObjectParticleStorm.StormType.SNOWSTORM);
 			}
 
-			//StormObject so
+
 			wo.getNbtCache().setNewNBT(stormNBT);
 			wo.nbtSyncFromServer();
 			wo.getNbtCache().updateCacheFromNew();
@@ -99,7 +82,7 @@ public class WeatherManagerClient extends WeatherManager {
 			addStormObject(wo);
 
 		} else if (command.equals("syncStormRemove")) {
-			//Weather.dbg("removing client side storm");
+
 			CompoundTag stormNBT = parNBT.getCompound("data");
 			long ID = stormNBT.getLong("ID");
 
@@ -111,7 +94,7 @@ public class WeatherManagerClient extends WeatherManager {
 				Weather.dbg("error removing storm, cant find by ID: " + ID);
 			}
 		} else if (command.equals("syncStormUpdate")) {
-			//Weather.dbg("updating client side storm");
+
 			CompoundTag stormNBT = parNBT.getCompound("data");
 			long ID = stormNBT.getLong("ID");
 
@@ -122,27 +105,25 @@ public class WeatherManagerClient extends WeatherManager {
 				so.getNbtCache().updateCacheFromNew();
 			} else {
 				Weather.dbg("error syncing storm, cant find by ID: " + ID + ", probably due to client resetting and waiting on full resync (this is ok)");
-				//Weather.dbgStackTrace();
+
 			}
 		} else if (command.equals("syncWindUpdate")) {
-			//Weather.dbg("updating client side wind");
+
 
 			CompoundTag nbt = parNBT.getCompound("data");
 
 			getWindManager().nbtSyncFromServer(nbt);
 		} else if (command.equals("syncWeatherUpdate")) {
-			//Weather.dbg("updating client side wind");
 
-			//NBTTagCompound nbt = parNBT.getCompound("data");
 
 			isVanillaRainActiveOnServer = parNBT.getBoolean("isVanillaRainActiveOnServer");
 			isVanillaThunderActiveOnServer = parNBT.getBoolean("isVanillaThunderActiveOnServer");
 			vanillaRainTimeOnServer = parNBT.getInt("vanillaRainTimeOnServer");
 			vanillaRainAmountOnServer = parNBT.getFloat("vanillaRainAmountOnServer");
 
-			//windMan.nbtSyncFromServer(nbt);
+
 		} else if (command.equals("syncBlockParticleNew")) {
-			//Weather.dbg("updating client side wind");
+
 
 			CompoundTag nbt = parNBT.getCompound("data");
 
@@ -154,7 +135,6 @@ public class WeatherManagerClient extends WeatherManager {
 
 			long ownerID = nbt.getLong("ownerID");
 
-			//CULog.dbg("add cube at " + posX + " " + posY + " " + posZ);
 
 			StormObject storm = getStormObjectByID(ownerID);
 			if (storm != null) {

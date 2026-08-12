@@ -12,7 +12,7 @@ public class ParticleTexFX extends EntityRotFX {
     {
         super(worldIn, posXIn, posYIn, posZIn, mX, mY-0.5, mZ);
         this.setSprite(par8Item);
-        //this.setParticleTexture(Minecraft.getInstance().getItemRenderer().getItemModelMesher().getParticleIcon(Items.IRON_AXE, 0));
+
         this.rCol = 1.0F;
         this.gCol = 1.0F;
         this.bCol = 1.0F;
@@ -21,14 +21,10 @@ public class ParticleTexFX extends EntityRotFX {
         this.setLifetime(100);
         this.setCanCollide(false);
     }
-	
+
 	public float getParticleGravity() {
 		return this.gravity;
 	}
 
-    /*@Override
-    public int getFXLayer()
-    {
-        return 1;
-    }*/
+
 }

@@ -50,10 +50,10 @@ public class WeatherObjectParticleStorm extends WeatherObject {
 
 	public WeatherObjectParticleStorm(WeatherManager parManager) {
 		super(parManager);
-		
+
 		this.weatherObjectType = EnumWeatherObjectType.SAND;
 	}
-	
+
 	public void initStormSpawn(Vec3 pos) {
 		this.pos = pos;
 		this.maxAge = 20*60*5;
@@ -70,8 +70,8 @@ public class WeatherObjectParticleStorm extends WeatherObject {
 	}
 
 	public static boolean isColdForStorm(Level world, Holder<Biome> biome, boolean forSpawn, BlockPos pos) {
-		//return biome.getPrecipitation() == Biome.Precipitation.SNOW;
-		//adjusted to this way to make it work with serene seasons
+
+
 		boolean canPrecip = biome.get().getPrecipitationAt(pos) == Biome.Precipitation.RAIN || biome.get().getPrecipitationAt(pos) == Biome.Precipitation.SNOW;
 		return canPrecip && CoroUtilCompatibility.coldEnoughToSnow(biome.get(), pos, world);
 	}
@@ -84,14 +84,14 @@ public class WeatherObjectParticleStorm extends WeatherObject {
 	public int getSize() {
 		return 250;
 	}
-	
+
 	@Override
 	public void tick() {
 		super.tick();
 
 		if (!manager.getWorld().isClientSide()) {
 			this.age++;
-			//CULog.dbg("this.age: " + this.age);
+
 			if (this.age > this.maxAge) {
 				this.remove();
 			}
@@ -109,10 +109,7 @@ public class WeatherObjectParticleStorm extends WeatherObject {
 		posGround = pos;
 	}
 
-	/**
-	 * 0-1F for first half of age, 1-0F for second half of age
-	 * @return
-	 */
+
 	public float getIntensity() {
 		float age = this.age;
 		float maxAge = this.maxAge;
@@ -144,7 +141,7 @@ public class WeatherObjectParticleStorm extends WeatherObject {
 
 		float angle = windMan.getWindAngleForClouds();
 
-		//keep it set to do a lot of work only occasionally, prevents chunk render tick spam for client which kills fps
+
 		int delay = ConfigSand.Sandstorm_Sand_Buildup_TickRate;
 		int loop = (int)((float)ConfigSand.Sandstorm_Sand_Buildup_LoopAmountBase * getIntensity());
 		boolean buildupOutsideArea = ConfigSand.Sandstorm_Sand_Buildup_AllowOutsideDesert;
@@ -157,23 +154,21 @@ public class WeatherObjectParticleStorm extends WeatherObject {
 			maxBlockStackingAllowed = ConfigSnow.Snowstorm_Snow_Block_Max_Height;
 		}
 
-		//delay = 1;
 
-		//sand block buildup
 		if (!world.isClientSide) {
 			if (getBlockForBuildup() != null) {
 				if (world.getGameTime() % delay == 0) {
 
 					for (int i = 0; i < loop; i++) {
 
-						//rate of placement based on storm intensity
+
 						if (rand.nextDouble() >= getIntensity()) continue;
 
 						Vec3 vecPos = getRandomPosInStorm();
 
 						BlockPos blockPos = WeatherUtilBlock.getPrecipitationHeightSafe(world, CoroUtilBlock.blockPos(vecPos.x, 0, vecPos.z));
 
-						//avoid unloaded areas
+
 						if (!world.hasChunkAt(blockPos)) continue;
 
 						if (buildupOutsideArea ||
@@ -194,12 +189,12 @@ public class WeatherObjectParticleStorm extends WeatherObject {
 		Vec3 vec = new Vec3(x, y, z);
 		return vec;
 	}
-	
+
 	@Override
 	public int getUpdateRateForNetwork() {
 		return 100;
 	}
-	
+
 	@Override
 	public void nbtSyncForClient() {
 		super.nbtSyncForClient();
@@ -209,7 +204,7 @@ public class WeatherObjectParticleStorm extends WeatherObject {
 		data.putString("type", type.key);
 		data.putString("test", "WHAT");
 	}
-	
+
 	@Override
 	public void nbtSyncFromServer() {
 		super.nbtSyncFromServer();

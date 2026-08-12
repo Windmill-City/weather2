@@ -30,7 +30,7 @@ public class ParticleCrossSection extends ParticleTexFX {
 		if (this.facePlayer || (this.rotationPitch == 0 && this.rotationYaw == 0)) {
 			quaternion = renderInfo.rotation();
 		} else {
-			// override rotations
+
 			quaternion = new Quaternionf(0, 0, 0, 1);
 			if (facePlayerYaw) {
 				quaternion.mul(Axis.YP.rotationDegrees(-renderInfo.getYRot()));

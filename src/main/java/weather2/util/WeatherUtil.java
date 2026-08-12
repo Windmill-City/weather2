@@ -55,8 +55,8 @@ public class WeatherUtil {
     }
 
     public static void testAllBlocks() {
-        //Blocks.GLASS
-        //if (!ConfigTornado.Storm_Tornado_GrabList.equals(lastConfigChecked)) {
+
+
             lastConfigChecked = ConfigTornado.Storm_Tornado_GrabList;
             CULog.log("PRINTING OUT ALL WEATHER2 TORNADO GRABBABLE BLOCKS WITH CURRENT CONFIG: ");
             ForgeRegistries.BLOCKS.forEach(block -> {
@@ -69,9 +69,7 @@ public class WeatherUtil {
                 }
             });
 
-            //boolean wat = canGrabViaLists(Blocks.TORCH.defaultBlockState());
-            //System.out.println("wat: " + wat);
-        //}
+
     }
 
     public static String addNamespaceIfMissing(String str) {
@@ -117,18 +115,18 @@ public class WeatherUtil {
         listGrabBlockCache.put(registeredName, !returnVal);
         return !returnVal;
     }
-	
+
     public static boolean isPaused() {
     	if (Minecraft.getInstance().isPaused()) return true;
     	return false;
     }
-    
+
     public static boolean isPausedSideSafe(Level world) {
-    	//return false if server side because it cant be paused legit
+
     	if (!world.isClientSide) return false;
     	return isPausedForClient();
     }
-    
+
     public static boolean isPausedForClient() {
     	if (Minecraft.getInstance().isPaused()) return true;
     	return false;
@@ -138,15 +136,13 @@ public class WeatherUtil {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
 
-        //test
-        //return calendar.get(Calendar.MONTH) == Calendar.MARCH && calendar.get(Calendar.DAY_OF_MONTH) == 25;
 
         return calendar.get(Calendar.MONTH) == Calendar.APRIL && calendar.get(Calendar.DAY_OF_MONTH) == 1;
     }
 
     public static boolean shouldRemoveBlock(BlockState blockID)
     {
-        //water no
+
         if (blockID.getBlock().defaultMapColor() == MapColor.WATER)
         {
             return false;
@@ -182,7 +178,7 @@ public class WeatherUtil {
                 try {
                     result = canGrabViaLists(state);
                 } catch (Exception e) {
-                    //sometimes NPEs (pre 1.18), just assume false if so
+
                     e.printStackTrace();
                     result = false;
                 }
@@ -195,18 +191,18 @@ public class WeatherUtil {
 
                     if (block == null) {
                         result = false;
-                        return result; //force return false to prevent unchecked future code outside scope
+                        return result;
                     } else {
 
-                        //float strVsBlock = block.getBlockHardness(block.defaultBlockState(), parWorld, new BlockPos(0, 0, 0)) - (((itemStr.getStrVsBlock(block.defaultBlockState()) - 1) / 4F));
+
                         float strVsBlock = state.getDestroySpeed(parWorld, new BlockPos(0, 0, 0)) - (((itemStr.getDestroySpeed(block.defaultBlockState()) - 1) / 4F));
 
-                        //System.out.println(strVsBlock);
-                        if (/*block.getHardness() <= 10000.6*/ (strVsBlock <= strMax && strVsBlock >= strMin) ||
+
+                        if ( (strVsBlock <= strMax && strVsBlock >= strMin) ||
                                 (state.getBlock().defaultMapColor() == MapColor.WOOD) ||
                                 state.getBlock().defaultMapColor() == MapColor.WOOL ||
-                                state.getBlock().defaultMapColor() == MapColor.PLANT ||/*
-                                state.getMaterial() == Material.VINE ||*/
+                                state.getBlock().defaultMapColor() == MapColor.PLANT ||
+
                                 block instanceof TallGrassBlock) {
                             if (!safetyCheck(state)) {
                                 result = false;
@@ -228,10 +224,6 @@ public class WeatherUtil {
                 }
             }
 
-            //TODO: 1.18
-            /*if (block == CommonProxy.blockWeatherMachine) {
-                result = false;
-            }*/
 
             return result;
         }
@@ -245,7 +237,7 @@ public class WeatherUtil {
     public static boolean safetyCheck(BlockState state)
     {
         Block id = state.getBlock();
-        if (id != Blocks.BEDROCK && id != Blocks.ACACIA_LOG && id != Blocks.CHEST && id != Blocks.JUKEBOX/* && id != Block.waterMoving.blockID && id != Block.waterStill.blockID */)
+        if (id != Blocks.BEDROCK && id != Blocks.ACACIA_LOG && id != Blocks.CHEST && id != Blocks.JUKEBOX)
         {
             return true;
         }
@@ -282,5 +274,5 @@ public class WeatherUtil {
         double d2 = vec2.z - vec1.z;
         return Math.sqrt(d0 * d0 + d1 * d1 + d2 * d2);
     }
-    
+
 }

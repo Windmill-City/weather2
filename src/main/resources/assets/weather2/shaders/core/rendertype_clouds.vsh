@@ -23,13 +23,12 @@ void main() {
 
     texCoord0 = UV0;
     vertexDistance = length((ModelViewMat * ModelMatrix * vec4(Position, 1.0)).xyz);
-    //vertexColor = Color;
+
     vec3 Light0_Direction = vec3(0.16145112, 0.80725557, -0.5650789);
     vec3 Light1_Direction = vec3(-0.16145112, 0.80725557, 0.5650789);
-    //normal = ProjMat * ModelMatrix * vec4(Normal, 0.0);
+
     normal = ProjMat * ModelMatrix * vec4(Normal, 0.0);
-    //normal = vec4(Normal, 0.0);
+
     vertexColor = minecraft_mix_light(Light0_Direction, Light1_Direction, normal.xyz, Color);
 }
-
 

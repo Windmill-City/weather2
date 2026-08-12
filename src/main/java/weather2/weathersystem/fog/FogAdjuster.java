@@ -21,7 +21,7 @@ public class FogAdjuster {
     private FogProfile fogSandstorm;
     private FogProfile fogSnowstorm;
 
-    //initial values arent really used for this one, just used to store dynamically updated values for smooth transitions
+
     private FogProfile fogVanilla;
 
     private FogProfile targetProfile;
@@ -31,7 +31,7 @@ public class FogAdjuster {
     private int lerpTicksCur = 20 * 15;
     private int lerpTicksMax = 20 * 15;
 
-    //reinit fog values when changes
+
     private boolean useFarFog = false;
 
     public static WeatherEventType lastWeatherType = null;
@@ -39,28 +39,6 @@ public class FogAdjuster {
     public int randDelay = 0;
 
     private boolean firstUseInit = true;
-
-    /**
-     *
-     * new fog adjust way:
-     * when theres a new request to change the state
-     * - set old state to prev state
-     * - for each thing we have to fade (each color, density)
-     * -- calculate a lerp rate so they all take the same amount of time?
-     * - actually, how do we want to decide on how long itll take? we might want that dynamic
-     * - maybe average it based on the distance between each color, so like, white to black and far dist fog change = long
-     * - but white to grey with not much fog dist change = short
-     *
-     * - we could let color and dist change at diff rates
-     * - important the rgbs transition the same, for obvious reasons
-     *
-     *  important note: activeProfile will now be updated with current actual vals
-     *  - so when we get interrupted, we actually have last state we were at
-     *
-     *  - never change active profile, just set a new target and rates
-     *
-     *  - monitor vanilla color/fog changes and i guess push a new target? should be fine, will be slow jank with my static 100 tick update for now
-     */
 
 
     public FogAdjuster() {
@@ -87,27 +65,25 @@ public class FogAdjuster {
 
         boolean fogDisco = false;
         if (fogDisco) {
-            //if (lastWeatherType != null) {
+
                 if (randDelay <= 0) {
                     Random rand = new Random();
                     randDelay = 20 + rand.nextInt(5);
                     startRandom();
                 }
-            //}
+
 
             randDelay--;
         }
 
         if ((SceneEnhancer.getWeatherState() == WeatherEventType.SANDSTORM || SceneEnhancer.getWeatherState() == WeatherEventType.SNOWSTORM)) {
             Player player = Minecraft.getInstance().player;
-            //use non cached version of isPlayerOutside to fix data mismatch that is timing crucial here
+
             boolean isPlayerOutside = WeatherUtilEntity.isEntityOutside(player);
             boolean playerOutside = isPlayerOutside || player.isInWater();
             boolean setFogFar = !playerOutside || player.isSpectator();
-            /*CULog.dbg("set to far mode?: " + setFogFar);
-            CULog.dbg("playerOutside: " + SceneEnhancer.isPlayerOutside);
-            CULog.dbg("isInWater: " + player.isInWater());
-            CULog.dbg("setFogFar: " + setFogFar);*/
+
+
             if (player != null) {
                 if ((setFogFar && !useFarFog) || !setFogFar && useFarFog) {
                     initProfiles(setFogFar);
@@ -135,14 +111,14 @@ public class FogAdjuster {
 
             lerpTicksCur++;
 
-            //System.out.println(lerpTicksCur + " - " + activeProfile.getFogStart() + " - " + activeProfile.getFogEnd());
+
         }
     }
 
     public void onFogColors(ViewportEvent.ComputeFogColor event) {
         updateWeatherState();
 
-        //get vanilla settings
+
         fogVanilla.getRgb().set(event.getRed(), event.getGreen(), event.getBlue());
 
         if (SceneEnhancer.isFogOverridding()) {
@@ -156,7 +132,7 @@ public class FogAdjuster {
     public void onFogRender(ViewportEvent.RenderFog event) {
         updateWeatherState();
 
-        //get vanilla settings
+
         if (event.getMode() == FogRenderer.FogMode.FOG_SKY) {
             fogVanilla.setFogStartSky(event.getNearPlaneDistance());
             fogVanilla.setFogEndSky(event.getFarPlaneDistance());
@@ -195,35 +171,35 @@ public class FogAdjuster {
 
     public void startHeatwave() {
         CULog.dbg("startHeatwave");
-        //activeProfile = targetProfile;
+
         targetProfile = new FogProfile(fogHeatwave);
         setupNewLerpRates();
     }
 
     public void startSandstorm() {
         CULog.dbg("startSandstorm");
-        //activeProfile = targetProfile;
+
         targetProfile = new FogProfile(fogSandstorm);
         setupNewLerpRates();
     }
 
     public void startSnowstorm() {
         CULog.dbg("startSnowstorm");
-        //activeProfile = targetProfile;
+
         targetProfile = new FogProfile(fogSnowstorm);
         setupNewLerpRates();
     }
 
     public void restoreVanilla() {
         CULog.dbg("restoreVanilla");
-        //activeProfile = targetProfile;
+
         targetProfile = new FogProfile(fogVanilla);
         setupNewLerpRates();
     }
 
     public void setupNewLerpRates() {
         if (firstUseInit) {
-            //if we've correctly set the starting vanilla fog values for both event states
+
             if (fogVanilla.getFogEnd() != -1 && fogVanilla.getFogEndSky() != -1) {
                 activeProfile = new FogProfile(fogVanilla);
                 firstUseInit = false;
@@ -252,23 +228,11 @@ public class FogAdjuster {
         return (weather.isHeatwave() || weather.isSandstorm() || weather.isSnowstorm()) || lerpTicksCur < lerpTicksMax;
     }
 
-    /**
-     * In its own method so quick render update calls can force an update check to prevent old data use which causes flickers
-     */
+
     public void updateWeatherState() {
         WeatherEventType curWeather = SceneEnhancer.getWeatherState();
 
-        //System.out.println("curWeather: " + curWeather);
-        //System.out.println("lastWeatherType: " + lastWeatherType);
 
-        /*if (curWeather != WeatherEventType.SANDSTORM &&
-                curWeather != WeatherEventType.SNOWSTORM &&
-                curWeather != WeatherEventType.HEATWAVE &&
-                curWeather != null) {
-            return;
-        }*/
-
-        //count ones we dont want fog for as null, to keep the transitions clean and less glitchy
         if (curWeather == WeatherEventType.ACID_RAIN || curWeather == WeatherEventType.HEAVY_RAIN || curWeather == WeatherEventType.HAIL) {
             curWeather = null;
         }
@@ -294,11 +258,7 @@ public class FogAdjuster {
         }
     }
 
-    /**
-     * 0 = off
-     * 1 = max on
-     * @return
-     */
+
     public float getLerpFraction() {
         if (lerpTicksMax == 0) return 0;
         return lerpTicksCur / lerpTicksMax;

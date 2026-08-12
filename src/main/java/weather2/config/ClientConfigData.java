@@ -2,9 +2,7 @@ package weather2.config;
 
 import net.minecraft.nbt.CompoundTag;
 
-/**
- * Used for anything that needs to be used on both client and server side, to avoid config mismatch between dedicated server and clients
- */
+
 public class ClientConfigData {
 
     public boolean overcastMode = false;
@@ -16,11 +14,7 @@ public class ClientConfigData {
     public boolean Storm_Tornado_grabVillagers = true;
     public boolean Aesthetic_Only_Mode = false;
 
-    /**
-     * For client side
-     *
-     * @param nbt
-     */
+
     public void readNBT(CompoundTag nbt) {
         overcastMode = nbt.getBoolean("overcastMode");
         Storm_Tornado_grabPlayer = nbt.getBoolean("Storm_Tornado_grabPlayer");
@@ -32,11 +26,7 @@ public class ClientConfigData {
         Aesthetic_Only_Mode = nbt.getBoolean("Aesthetic_Only_Mode");
     }
 
-    /**
-     * For server side
-     *
-     * @param data
-     */
+
     public static void writeNBT(CompoundTag data) {
 
         data.putBoolean("overcastMode", ConfigMisc.overcastMode);

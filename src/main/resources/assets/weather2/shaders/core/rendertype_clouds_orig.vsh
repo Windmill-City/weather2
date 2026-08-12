@@ -41,19 +41,6 @@ mat4 rotationZ( in float angle ) {
     0,				0,		0,	1);
 }
 
-//
-// GLSL textureless classic 3D noise "cnoise",
-// with an RSL-style periodic variant "pnoise".
-// Author:  Stefan Gustavson (stefan.gustavson@liu.se)
-// Version: 2011-10-11
-//
-// Many thanks to Ian McEwan of Ashima Arts for the
-// ideas for permutation and gradient selection.
-//
-// Copyright (c) 2011 Stefan Gustavson. All rights reserved.
-// Distributed under the MIT license. See LICENSE file.
-// https://github.com/stegu/webgl-noise
-//
 
 vec3 mod289(vec3 x)
 {
@@ -79,15 +66,15 @@ vec3 fade(vec3 t) {
     return t*t*t*(t*(t*6.0-15.0)+10.0);
 }
 
-// Classic Perlin noise
+
 float cnoise(vec3 P)
 {
-    vec3 Pi0 = floor(P); // Integer part for indexing
-    vec3 Pi1 = Pi0 + vec3(1.0); // Integer part + 1
+    vec3 Pi0 = floor(P);
+    vec3 Pi1 = Pi0 + vec3(1.0);
     Pi0 = mod289(Pi0);
     Pi1 = mod289(Pi1);
-    vec3 Pf0 = fract(P); // Fractional part for interpolation
-    vec3 Pf1 = Pf0 - vec3(1.0); // Fractional part - 1.0
+    vec3 Pf0 = fract(P);
+    vec3 Pf1 = Pf0 - vec3(1.0);
     vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
     vec4 iy = vec4(Pi0.yy, Pi1.yy);
     vec4 iz0 = Pi0.zzzz;
@@ -149,15 +136,15 @@ float cnoise(vec3 P)
     return 2.2 * n_xyz;
 }
 
-// Classic Perlin noise, periodic variant
+
 float pnoise(vec3 P, vec3 rep)
 {
-    vec3 Pi0 = mod(floor(P), rep); // Integer part, modulo period
-    vec3 Pi1 = mod(Pi0 + vec3(1.0), rep); // Integer part + 1, mod period
+    vec3 Pi0 = mod(floor(P), rep);
+    vec3 Pi1 = mod(Pi0 + vec3(1.0), rep);
     Pi0 = mod289(Pi0);
     Pi1 = mod289(Pi1);
-    vec3 Pf0 = fract(P); // Fractional part for interpolation
-    vec3 Pf1 = Pf0 - vec3(1.0); // Fractional part - 1.0
+    vec3 Pf0 = fract(P);
+    vec3 Pf1 = Pf0 - vec3(1.0);
     vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
     vec4 iy = vec4(Pi0.yy, Pi1.yy);
     vec4 iz0 = Pi0.zzzz;
@@ -268,42 +255,33 @@ void main() {
     normal = ProjMat * ModelViewMat * vec4(Normal, 0.0);
 
     float noise = 30.0 *  -.10 * turbulence( .5 * test + CustomTime );
-    //float noise = 30.0 *  -.10 * turbulence( .5 * normal.xyz + CustomTime );
+
     float b = 5.0 * pnoise( 0.05 * Position + vec3( 2.0 * CustomTime ), vec3( 100.0 ) );
-    //float b = 5.0 * noise2( 0.05 * Position + vec3( 2.0 * CustomTime ) );
+
     float displacement = - noise + b;
 
-    //float randomSeed = rand(normal.xy);
 
-    //vec3 newPosition = Position + vec3(sin(CustomTime) * 3, cos(CustomTime) * 3, 0);
-    //vec3 newPosition = Position + normal.xyz * displacement;
     vec3 newPosition = Position + test;
-    //vec3 newPosition = Position + test * displacement;
+
 
     gl_Position = ProjMat * ModelViewMat * vec4(newPosition, 1.0);
 
     texCoord0 = UV0;
     vertexDistance = length((ModelViewMat * vec4(newPosition, 1.0)).xyz);
     vertexColor = Color;
-    //vec3 TestNormal = vec3(0, Normal.y * cos(CustomTime), 0);
-    //mat4 NormalRotate = TestNormal * rotationZ(CustomTime);
-    //normal = vec4(Normal, 0.0);
-    //vec4 normal2 = ModelViewMat * vec4(Normal, 0.0);
-    //vertexColor = minecraft_mix_light(Light0_Direction, Light1_Direction, normal.xyz, Color);
-    //[0.16145112, 0.80725557, -0.5650789]
-    //[-0.16145112, 0.80725557, 0.5650789]
+
+
     vec4 l0 = vec4(Light0_Direction, 0) * -ModelViewMat;
     vec4 l1 = vec4(Light1_Direction, 0) * -ModelViewMat;
     vec3 l00 = vec3(0.16145112, 0.80725557, -0.5650789);
     vec3 l11 = vec3(-0.16145112, 0.80725557, 0.5650789);
     if (CustomTime == 1F) {
-        //vertexColor = minecraft_mix_light(l0.xyz, l1.xyz, TestNormal, Color);
+
     } else {
 
     }
 
     vertexColor = minecraft_mix_light(l00, l11, Normal, Color);
-    //vertexColor = minecraft_mix_light(l00, l11, Normal, Color);
-}
 
+}
 

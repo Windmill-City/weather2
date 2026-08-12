@@ -70,14 +70,14 @@ public class WindTurbineEntityRenderer<T extends BlockEntity> implements BlockEn
     public void render(T te, float partialTicks, PoseStack stack, MultiBufferSource buffer, int combinedLightIn, int combinedOverlayIn) {
         this.model.root().getAllParts().forEach(ModelPart::resetPose);
 
-        //fixes for block
+
         ModelPart root = this.model.root();
         root.x += 8;
         root.y += 8;
         root.z += 8;
         root.xRot += Math.toRadians(180);
         root.yRot += Math.toRadians(180);
-        //te.getLevel().getBrightness(LightLayer.BLOCK, te.getBlockPos().above())
+
 
         root.y += 16;
 

@@ -75,7 +75,7 @@ public class ParticleManagerExtended implements PreparableReloadListener {
 
    public ParticleManagerExtended(ClientLevel p_107299_, TextureManager p_107300_) {
       this.textureAtlas = new TextureAtlas(TextureAtlas.LOCATION_PARTICLES);
-      //p_107300_.register(this.textureAtlas.location(), this.textureAtlas);
+
       this.level = p_107299_;
       this.textureManager = p_107300_;
    }
@@ -239,7 +239,7 @@ public class ParticleManagerExtended implements PreparableReloadListener {
       }
    }
 
-   /**@deprecated Forge: use {@link #render(PoseStack, MultiBufferSource.BufferSource, LightTexture, Camera, float, net.minecraft.client.renderer.culling.Frustum)} with Frustum as additional parameter*/
+
    @Deprecated
    public void render(PoseStack p_107337_, MultiBufferSource.BufferSource p_107338_, LightTexture p_107339_, Camera p_107340_, float p_107341_) {
        render(p_107337_, p_107338_, p_107339_, p_107340_, p_107341_, null);
@@ -247,7 +247,7 @@ public class ParticleManagerExtended implements PreparableReloadListener {
 
    public void render(PoseStack p_107337_, MultiBufferSource.BufferSource p_107338_, LightTexture p_107339_, Camera p_107340_, float p_107341_, @Nullable net.minecraft.client.renderer.culling.Frustum clippingHelper) {
       this.level.getProfiler().push("weather2_particle_render");
-      //if (true) return;
+
       float fogStart = RenderSystem.getShaderFogStart();
       float fogEnd = RenderSystem.getShaderFogEnd();
       RenderSystem.setShaderFogStart(fogStart * 4);
@@ -256,7 +256,7 @@ public class ParticleManagerExtended implements PreparableReloadListener {
       p_107339_.turnOnLightLayer();
       RenderSystem.enableDepthTest();
 
-      //these didnt exist in our 1.18 modification, why?
+
       RenderSystem.activeTexture(org.lwjgl.opengl.GL13.GL_TEXTURE2);
       RenderSystem.activeTexture(org.lwjgl.opengl.GL13.GL_TEXTURE0);
 
@@ -268,7 +268,7 @@ public class ParticleManagerExtended implements PreparableReloadListener {
       RenderSystem.disableCull();
       int particleCount = 0;
 
-      for(ParticleRenderType particlerendertype : this.particles.keySet()) { // Forge: allow custom IParticleRenderType's
+      for(ParticleRenderType particlerendertype : this.particles.keySet()) {
          this.level.getProfiler().push(particlerendertype.toString());
          if (particlerendertype == ParticleRenderType.NO_RENDER) continue;
          Iterable<Particle> iterable = this.particles.get(particlerendertype);

@@ -11,7 +11,7 @@ public class WeatherUtilConfig {
 
 	public static List<String> listDimensionsWeather = new ArrayList<>();
 	public static List<String> listDimensionsClouds = new ArrayList<>();
-	//used for deadly storms and sandstorms
+
 	public static List<String> listDimensionsStorms = new ArrayList<>();
 	public static List<String> listDimensionsWindEffects = new ArrayList<>();
 
@@ -34,10 +34,10 @@ public class WeatherUtilConfig {
 			try {
 				arrStr[i] = arrStr[i];
 			} catch (Exception ex) {
-				arrStr[i] = "minecraft:none"; //set to -999999, hope no dimension id of this exists
+				arrStr[i] = "minecraft:none";
 			}
 		}
 		return new ArrayList(Arrays.asList(arrStr));
 	}
-	
+
 }

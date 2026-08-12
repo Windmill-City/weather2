@@ -48,8 +48,8 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
 
         @Override
         public void end(Tesselator p_217599_1_) {
-            //TODO: not possible in 1.20 now i guess, cant remember why this line was important
-            //p_217599_1_.getBuilder().setQuadSortOrigin(0, 0, 0);
+
+
             ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT.end(p_217599_1_);
         }
 
@@ -71,8 +71,8 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
 
         @Override
         public void end(Tesselator p_217599_1_) {
-            //TODO: not possible in 1.20 now i guess, cant remember why this line was important
-            //p_217599_1_.getBuilder().setQuadSortOrigin(0, 0, 0);
+
+
             ParticleRenderType.PARTICLE_SHEET_OPAQUE.end(p_217599_1_);
         }
 
@@ -85,7 +85,7 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
 
     public float spawnY = -1;
 
-    //this field and 2 methods below are for backwards compatibility with old particle system from the new icon based system
+
     public int particleTextureIndexInt = 0;
 
     public float brightness = 0.7F;
@@ -95,10 +95,10 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
 
     public float renderRange = 128F;
 
-    //used in RotatingEffectRenderer to assist in solving some transparency ordering issues, eg, tornado funnel before clouds
+
     public int renderOrder = 0;
 
-    //not a real entity ID now, just used for making rendering of entities slightly unique
+
     private int entityID = 0;
 
     public int debugID = 0;
@@ -116,12 +116,12 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
 
     public boolean facePlayer = false;
 
-    //facePlayer will override this
+
     public boolean facePlayerYaw = false;
 
     public boolean vanillaMotionDampen = true;
 
-    //for particle behaviors
+
     public double aboveGroundHeight = 4.5D;
     public boolean checkAheadToBounce = true;
     public boolean collisionSpeedDampen = true;
@@ -158,7 +158,7 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
 
     public float avoidTerrainAngle = 0;
 
-    //this is for yaw only
+
     public boolean useRotationAroundCenter = false;
     public float rotationAroundCenter = 0;
     public float rotationAroundCenterPrev = 0;
@@ -167,10 +167,7 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
 
     private boolean slantParticleToWind = false;
 
-    /*public Quaternion rotation;
-    public Quaternion rotationPrev;*/
 
-    //set to true for direct quaternion control, not EULER conversion helper
     public boolean quatControl = false;
 
     public boolean fastLight = false;
@@ -187,15 +184,15 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
     public boolean isCollidedVerticallyDownwards = false;
     public boolean isCollidedVerticallyUpwards = false;
 
-    //used for translational rotation around a point
+
     public Vector3f rotationAround = new Vector3f();
 
-    //workaround for particles that are fading out while partially in the ground, keeps them rendering at previous brightness instead of 0
+
     protected int lastNonZeroBrightness = 15728640;
 
-    public ParticleBehaviors pb = null; //designed to be a reference to the central objects particle behavior
+    public ParticleBehaviors pb = null;
 
-    //workaround for avoiding using vanilla bb which causes huge performance issues for large sizes
+
     private boolean useCustomBBForRenderCulling = false;
     private static final AABB INITIAL_AABB = new AABB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
     private AABB bbRender = INITIAL_AABB;
@@ -206,15 +203,11 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
     {
         super(par1World, par2, par4, par6, par8, par10, par12);
         setSize(0.3F, 0.3F);
-        //this.isImmuneToFire = true;
-        //this.setMaxAge(100);
+
 
         this.entityID = CoroUtilMisc.random.nextInt(100000);
 
-        //rotation = new Quaternion();
 
-        //TODO: 1.14 uncomment for shaders
-        //brightnessCache = CoroUtilBlockLightCache.getBrightnessCached(world, (float)posX, (float)posY, (float)posZ);
     }
 
     public boolean isSlantParticleToWind() {
@@ -295,11 +288,10 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
 
         Entity ent = Minecraft.getInstance().getCameraEntity();
 
-        //if (this.entityID % 400 == 0) System.out.println("tick time: " + this.worldObj.getGameTime());
 
         if (!isVanillaMotionDampen()) {
-            //cancel motion dampening (which is basically air resistance)
-            //keep this up to date with the inverse of whatever Particle.tick uses
+
+
             this.xd /= 0.9800000190734863D;
             this.yd /= 0.9800000190734863D;
             this.zd /= 0.9800000190734863D;
@@ -318,14 +310,13 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
             if (killWhenUnderTopmostBlock) {
 
 
-                //int height = this.world.getPrecipitationHeight(new BlockPos(this.posX, this.posY, this.posZ)).getY();
                 int height = level.getHeightmapPos(Heightmap.Types.MOTION_BLOCKING, pos).getY();
                 if (this.y - killWhenUnderTopmostBlock_ScanAheadRange <= height) {
                     startDeath();
                 }
             }
 
-            //case: when on high pillar and rain is falling far below you, start killing it / fading it out
+
             if (killWhenUnderCameraAtLeast != 0) {
                 if (this.y < ent.getY() - killWhenUnderCameraAtLeast) {
                     startDeath();
@@ -336,7 +327,7 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
                 if (getAge() > 20 && getAge() % 5 == 0) {
 
                     if (ent.distanceToSqr(this.x, this.y, this.z) > killWhenFarFromCameraAtLeast * killWhenFarFromCameraAtLeast) {
-                        //System.out.println("far kill");
+
                         startDeath();
                     }
                 }
@@ -344,16 +335,16 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
         }
 
         if (!collisionSpeedDampen) {
-            //if (this.isCollided()) {
+
             if (this.onGround) {
                 this.xd /= 0.699999988079071D;
                 this.zd /= 0.699999988079071D;
             }
         }
 
-        double speedXZ = Math.sqrt(getMotionX() * getMotionX() + /*getMotionY() * getMotionY() + */getMotionZ() * getMotionZ());
+        double speedXZ = Math.sqrt(getMotionX() * getMotionX() + getMotionZ() * getMotionZ());
         double spinFastRateAdj = spinFastRate * speedXZ * 10F;
-        //spinFastRateAdj = 0;
+
 
         if (spinFast) {
             this.rotationPitch += this.entityID % 2 == 0 ? spinFastRateAdj : -spinFastRateAdj;
@@ -369,15 +360,15 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
 
         if (!fadingOut) {
             if (ticksFadeInMax > 0 && this.getAge() < ticksFadeInMax) {
-                //System.out.println("this.getAge() / ticksFadeInMax: " + this.getAge() / ticksFadeInMax);
+
                 this.setAlpha((float)this.getAge() / ticksFadeInMax * getFullAlphaTarget());
-                //this.setAlphaF(0.15F);
+
             } else if (ticksFadeOutMax > 0 && this.getAge() > this.getLifetime() - ticksFadeOutMax) {
                 float count = this.getAge() - (this.getLifetime() - ticksFadeOutMax);
                 float val = (ticksFadeOutMax - (count)) / ticksFadeOutMax;
-                //System.out.println(val);
+
                 this.setAlpha(val * getFullAlphaTarget());
-                //make sure fully visible otherwise
+
             } else if (ticksFadeInMax > 0 || ticksFadeOutMax > 0) {
                 this.setAlpha(getFullAlphaTarget());
             }
@@ -388,21 +379,18 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
                 this.remove();
             }
             float val = 1F - (ticksFadeOutCurOnDeath / ticksFadeOutMaxOnDeath);
-            //System.out.println(val);
+
             this.setAlpha(val * getFullAlphaTarget());
         }
 
         if (level.getGameTime() % 5 == 0) {
-            //TODO: 1.14 uncomment
-            //brightnessCache = CoroUtilBlockLightCache.getBrightnessCached(world, (float)posX, (float)posY, (float)posZ);
+
+
         }
 
         rotationAroundCenter += rotationSpeedAroundCenter;
         rotationAroundCenter %= 360;
-        /*while (rotationAroundCenter >= 360) {
-            System.out.println(rotationAroundCenter);
-            rotationAroundCenter -= 360;
-        }*/
+
 
         tickExtraRotations();
     }
@@ -418,40 +406,25 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
         WindManager windMan = weatherMan.getWindManager();
         if (windMan == null) return;
         if (this instanceof PivotingParticle) return;
-        //particles on ground shouldnt get blown as hard (idea for hail)
+
         if (onGround) {
             windMan.applyWindForceNew(this, (1F / 20F) * 0.3F, 0.5F, useDynamicWindSpeed);
         } else {
             windMan.applyWindForceNew(this, 1F / 20F, 0.5F, useDynamicWindSpeed);
         }
 
-        /*if (!quatControl) {
-            rotationPrev = new Quaternion(rotation);
-            Entity ent = Minecraft.getInstance().getRenderViewEntity();
-            updateQuaternion(ent);
-        }*/
+
     }
 
     public void startDeath() {
         if (ticksFadeOutMaxOnDeath > 0) {
-            ticksFadeOutCurOnDeath = 0;//ticksFadeOutMaxOnDeath;
+            ticksFadeOutCurOnDeath = 0;
             fadingOut = true;
         } else {
             this.remove();
         }
     }
-    
-    /*public void setParticleTextureIndex(int par1)
-    {
-        this.particleTextureIndexInt = par1;
-        if (this.getFXLayer() == 0) super.setParticleTextureIndex(par1);
-    }*/
 
-    /*@Override
-    public int getFXLayer()
-    {
-        return 5;
-    }*/
 
     public void spawnAsWeatherEffect()
     {
@@ -481,7 +454,7 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
     public void setSize(float par1, float par2)
     {
         super.setSize(par1, par2);
-        // MC-12269 - fix particle being offset to the NW
+
         this.setPos(x, y, z);
     }
 
@@ -494,8 +467,8 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
     }
 
     public void setScale(float parScale) {
-        //dont set the AABB as big as the render scale, otherwise huge performance losses, we'll just use 0.3 in constructor for now
-        //super.setSize(parScale, parScale);
+
+
         this.setSizeForRenderCulling(parScale, parScale);
         quadSize = parScale;
     }
@@ -504,15 +477,6 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
         return new Vector3f((float)x, (float)y, (float)z);
     }
 
-    /*@Override
-    public Quaternion getQuaternion() {
-        return this.rotation;
-    }
-
-    @Override
-    public Quaternion getQuaternionPrev() {
-        return this.rotationPrev;
-    }*/
 
     public float getScale() {
         return quadSize;
@@ -639,7 +603,7 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
         if (this.facePlayer || (this.rotationPitch == 0 && this.rotationYaw == 0)) {
             quaternion = renderInfo.rotation();
         } else {
-            // override rotations
+
             quaternion = new Quaternionf(0, 0, 0, 1);
             if (facePlayerYaw) {
                 quaternion.mul(Axis.YP.rotationDegrees(-renderInfo.getYRot()));
@@ -672,7 +636,7 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
         float f5 = this.getV0();
         float f6 = this.getV1();
         int j = this.getLightColor(partialTicks);
-        //int j = 15728800;
+
         if (j > 0) {
             lastNonZeroBrightness = j;
         } else {
@@ -685,73 +649,12 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
 
     }
 
-    //TODO: 1.14 uncomment
-	/*public void renderParticleForShader(InstancedMeshParticle mesh, Transformation transformation, Matrix4fe viewMatrix, Entity entityIn,
-                                        float partialTicks, float rotationX, float rotationZ,
-                                        float rotationYZ, float rotationXY, float rotationXZ) {
-
-        if (mesh.curBufferPos >= mesh.numInstances) return;
-
-        //camera relative positions, for world position, remove the interpPos values
-        float posX = (float) (this.prevPosX + (this.posX - this.prevPosX) * (double) partialTicks - this.interpPosX);
-        float posY = (float) (this.prevPosY + (this.posY - this.prevPosY) * (double) partialTicks - this.interpPosY);
-        float posZ = (float) (this.prevPosZ + (this.posZ - this.prevPosZ) * (double) partialTicks - this.interpPosZ);
-        //Vector3f pos = new Vector3f((float) (entityIn.posX - particle.posX), (float) (entityIn.posY - particle.posY), (float) (entityIn.posZ - particle.posZ));
-        Vector3f pos = new Vector3f(posX, posY, posZ);
-
-        Matrix4fe modelMatrix = transformation.buildModelMatrix(this, pos, partialTicks);
-
-        //adjust to perspective and camera
-        //Matrix4fe modelViewMatrix = transformation.buildModelViewMatrix(modelMatrix, viewMatrix);
-        //upload to buffer
-        modelMatrix.get(mesh.INSTANCE_SIZE_FLOATS * (mesh.curBufferPos), mesh.instanceDataBuffer);
-
-        //brightness
-        float brightness;
-        //brightness = CoroUtilBlockLightCache.getBrightnessCached(world, (float)this.posX, (float)this.posY, (float)this.posZ);
-        brightness = brightnessCache;
-        //brightness = -1F;
-        //brightness = CoroUtilBlockLightCache.brightnessPlayer;
-        mesh.instanceDataBuffer.put(mesh.INSTANCE_SIZE_FLOATS * (mesh.curBufferPos) + mesh.MATRIX_SIZE_FLOATS, brightness);
-
-        int rgbaIndex = 0;
-        mesh.instanceDataBuffer.put(mesh.INSTANCE_SIZE_FLOATS * (mesh.curBufferPos)
-                + mesh.MATRIX_SIZE_FLOATS + 1 + (rgbaIndex++), this.particleRed);
-        mesh.instanceDataBuffer.put(mesh.INSTANCE_SIZE_FLOATS * (mesh.curBufferPos)
-                + mesh.MATRIX_SIZE_FLOATS + 1 + (rgbaIndex++), this.particleGreen);
-        mesh.instanceDataBuffer.put(mesh.INSTANCE_SIZE_FLOATS * (mesh.curBufferPos)
-                + mesh.MATRIX_SIZE_FLOATS + 1 + (rgbaIndex++), this.particleBlue);
-        mesh.instanceDataBuffer.put(mesh.INSTANCE_SIZE_FLOATS * (mesh.curBufferPos)
-                + mesh.MATRIX_SIZE_FLOATS + 1 + (rgbaIndex++), this.getAlphaF());
-
-        mesh.curBufferPos++;
-        
-    }*/
-
-    /*public void renderParticleForShaderTest(InstancedMeshParticle mesh, Transformation transformation, Matrix4fe viewMatrix, Entity entityIn,
-                                            float partialTicks, float rotationX, float rotationZ,
-                                            float rotationYZ, float rotationXY, float rotationXZ) {
-
-        if (mesh.curBufferPos >= mesh.numInstances) return;
-
-        int rgbaIndex = 0;
-        mesh.instanceDataBufferTest.put(mesh.INSTANCE_SIZE_FLOATS_TEST * (mesh.curBufferPos)
-                + (rgbaIndex++), this.getRedColorF());
-        mesh.instanceDataBufferTest.put(mesh.INSTANCE_SIZE_FLOATS_TEST * (mesh.curBufferPos)
-                + (rgbaIndex++), this.getGreenColorF());
-        mesh.instanceDataBufferTest.put(mesh.INSTANCE_SIZE_FLOATS_TEST * (mesh.curBufferPos)
-                + (rgbaIndex++), this.getBlueColorF());
-        mesh.instanceDataBufferTest.put(mesh.INSTANCE_SIZE_FLOATS_TEST * (mesh.curBufferPos)
-                + (rgbaIndex++), this.getAlphaF());
-
-        mesh.curBufferPos++;
-    }*/
 
     public void setKillOnCollide(boolean val) {
         this.killOnCollide = val;
     }
 
-    //override for extra isCollided types
+
     @Override
     public void move(double x, double y, double z) {
         double xx = x;
@@ -769,12 +672,7 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
             if (isUseCustomBBForRenderCulling()) {
                 this.setBoundingBoxForRender(this.getBoundingBoxForRender(1F).move(x, y, z));
             }
-            /*Vec3 pivotedPosition = getPivotedPosition(0);
-            if (pivotedPosition != Vec3.ZERO) {
-                this.setBoundingBox(this.getBoundingBox().move(x + pivotedPosition.x, y + pivotedPosition.y, z + pivotedPosition.z));
-            } else {
-                this.setBoundingBox(this.getBoundingBox().move(x, y, z));
-            }*/
+
 
             this.setLocationFromBoundingbox();
         }
@@ -822,43 +720,22 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
 
     @Override
     public int getLightColor(float p_189214_1_) {
-        return super.getLightColor(p_189214_1_);//(int)((float)super.getBrightnessForRender(p_189214_1_))/* * this.world.getSunBrightness(1F))*/;
+        return super.getLightColor(p_189214_1_);
     }
 
-    /*public void updateQuaternion(Entity camera) {
-
-        if (camera != null) {
-            if (this.facePlayer) {
-                this.rotationYaw = camera.rotationYaw;
-                this.rotationPitch = camera.rotationPitch;
-            } else if (facePlayerYaw) {
-                this.rotationYaw = camera.rotationYaw;
-            }
-        }
-
-        Quaternion qY = new Quaternion();
-        Quaternion qX = new Quaternion();
-        qY.setFromAxisAngle(new Vector4f(0, 1, 0, (float)Math.toRadians(-this.rotationYaw - 180F)));
-        qX.setFromAxisAngle(new Vector4f(1, 0, 0, (float)Math.toRadians(-this.rotationPitch)));
-        if (this.rotateOrderXY) {
-            Quaternion.mul(qX, qY, this.rotation);
-        } else {
-            Quaternion.mul(qY, qX, this.rotation);
-        }
-    }*/
 
     @Override
     public void setColor(float particleRedIn, float particleGreenIn, float particleBlueIn) {
         super.setColor(particleRedIn, particleGreenIn, particleBlueIn);
-        //TODO: 1.14 uncomment
-        /*RotatingParticleManager.markDirtyVBO2();*/
+
+
     }
 
     @Override
     public void setAlpha(float alpha) {
         super.setAlpha(alpha);
-        //TODO: 1.14 uncomment
-        /*RotatingParticleManager.markDirtyVBO2();*/
+
+
     }
 
     public int getKillWhenUnderTopmostBlock_ScanAheadRange() {

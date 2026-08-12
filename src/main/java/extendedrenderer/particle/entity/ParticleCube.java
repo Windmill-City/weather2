@@ -37,17 +37,14 @@ public class ParticleCube extends ParticleTexFX {
                         BlockState state) {
 		super((ClientLevel) worldIn, posXIn, posYIn, posZIn, mX, mY, mZ, ParticleRegistry.potato);
 
-		/**
-		 * really basic way to get a sprite from a blockstate, could easily get the wrong one if multiple quads are used per direction
-		 * should do fine for most blocks that have the same texture on every side
-		 */
+
 		TextureAtlasSprite sprite = getSpriteFromState(state);
 		if (sprite != null) {
 			setSprite(sprite);
 		} else {
 			CULog.dbg("unable to find sprite to use from block: " + state);
 			sprite = getSpriteFromState(Blocks.DIRT.defaultBlockState());
-			//if (CoroUtilMisc.random().nextBoolean()) sprite = getSpriteFromState(Blocks.GRASS.defaultBlockState());
+
 			if (sprite != null) {
 				setSprite(sprite);
 			}
@@ -67,7 +64,7 @@ public class ParticleCube extends ParticleTexFX {
 			if (list.size() > 0) {
 				return list.get(0).getSprite();
 			}
-			//plan b
+
 			if (model.getParticleIcon() != null) {
 				return model.getParticleIcon();
 			}
@@ -77,7 +74,7 @@ public class ParticleCube extends ParticleTexFX {
 
 	@Override
 	public void render(VertexConsumer buffer, Camera renderInfo, float partialTicks) {
-		//if (true) return;
+
 		Vec3 Vector3d = renderInfo.getPosition();
 		float f = (float)(Mth.lerp(partialTicks, this.xo, this.x) - Vector3d.x());
 		float f1 = (float)(Mth.lerp(partialTicks, this.yo, this.y) - Vector3d.y());
@@ -86,7 +83,7 @@ public class ParticleCube extends ParticleTexFX {
 		if (this.facePlayer || (this.rotationPitch == 0 && this.rotationYaw == 0)) {
 			quaternion = renderInfo.rotation();
 		} else {
-			// override rotations
+
 			quaternion = new Quaternionf(0, 0, 0, 1);
 			if (facePlayerYaw) {
 				quaternion.mul(Axis.YP.rotationDegrees(-renderInfo.getYRot()));
@@ -102,7 +99,7 @@ public class ParticleCube extends ParticleTexFX {
 
 		Vector3f[] face;
 
-		//xy -z
+
 		face = new Vector3f[]{
 				new Vector3f(-1.0F, -1.0F, -1.0F),
 				new Vector3f(-1.0F, 1.0F, -1.0F),
@@ -110,7 +107,7 @@ public class ParticleCube extends ParticleTexFX {
 				new Vector3f(1.0F, -1.0F, -1.0F)};
 		faces.add(face);
 
-		//xy +z
+
 		face = new Vector3f[]{
 				new Vector3f(-1.0F, -1.0F, 1.0F),
 				new Vector3f(-1.0F, 1.0F, 1.0F),
@@ -118,7 +115,7 @@ public class ParticleCube extends ParticleTexFX {
 				new Vector3f(1.0F, -1.0F, 1.0F)};
 		faces.add(face);
 
-		//yz -x
+
 		face = new Vector3f[]{
 				new Vector3f(-1.0F, -1.0F, -1.0F),
 				new Vector3f(-1.0F, 1.0F, -1.0F),
@@ -126,7 +123,7 @@ public class ParticleCube extends ParticleTexFX {
 				new Vector3f(-1.0F, -1.0F, 1.0F)};
 		faces.add(face);
 
-		//yz +x
+
 		face = new Vector3f[]{
 				new Vector3f(1.0F, -1.0F, -1.0F),
 				new Vector3f(1.0F, 1.0F, -1.0F),
@@ -134,7 +131,7 @@ public class ParticleCube extends ParticleTexFX {
 				new Vector3f(1.0F, -1.0F, 1.0F)};
 		faces.add(face);
 
-		//xz -y
+
 		face = new Vector3f[]{
 				new Vector3f(-1.0F, -1.0F, -1.0F),
 				new Vector3f(-1.0F, -1.0F, 1.0F),
@@ -142,7 +139,7 @@ public class ParticleCube extends ParticleTexFX {
 				new Vector3f(1.0F, -1.0F, -1.0F)};
 		faces.add(face);
 
-		//xz +y
+
 		face = new Vector3f[]{
 				new Vector3f(-1.0F, 1.0F, -1.0F),
 				new Vector3f(-1.0F, 1.0F, 1.0F),
@@ -188,6 +185,6 @@ public class ParticleCube extends ParticleTexFX {
 	@Override
 	public ParticleRenderType getRenderType() {
 		return SORTED_OPAQUE_BLOCK;
-		//return super.getRenderType();
+
 	}
 }

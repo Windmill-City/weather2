@@ -11,26 +11,17 @@ import weather2.weathersystem.storm.StormObject;
 
 
 public class ConfigMisc implements IConfigCategory {
-	
-	//misc
-	//public static boolean Misc_proxyRenderOverrideEnabled = true;
-	//public static boolean Misc_takeControlOfGlobalRain = true;
 
-	//cutoff a bit extra, noticed lots of storms being insta killed on creation
+
 	public static int Misc_simBoxRadiusCutoff = 1024+100;
 	public static int Misc_simBoxRadiusSpawn = 1024;
-	/*public static boolean Misc_ForceVanillaCloudsOff = false;
-	public static int Misc_AutoDataSaveIntervalInTicks = 20*60*30;
-	public static boolean consoleDebug = false;
 
-	public static boolean radarCloudDebug = false;*/
-	
-	//Weather
+
 	@ConfigComment("If true, lets server side do vanilla weather rules, weather2 will only make storms when server side says 'rain' is on")
 	public static boolean overcastMode = false;
 	@ConfigComment("Used if overcastMode is off, 1 = lock weather on, 0 = lock weather off, -1 = dont lock anything, let server do whatever")
-	public static int lockServerWeatherMode = 0; //is only used if overcastMode is off
-	//cloudOption
+	public static int lockServerWeatherMode = 0;
+
 	@ConfigComment("How many ticks between cloud particle spawning")
 	public static int Cloud_ParticleSpawnDelay = 2;
 	@ConfigComment("Distance between cloud formations, not particles, this includes invisible cloudless formations used during partial cloud coverage")
@@ -50,52 +41,19 @@ public class ConfigMisc implements IConfigCategory {
 
 	@ConfigComment("Maximum percent of cloud coverage, supports over 100% for extended full cloud sky coverage")
 	public static double Cloud_Coverage_Max_Percent = 100D;
-	
-	/*public static int Thread_Particle_Process_Delay = 400;
-	//sound
-	public static double volWindScale = 0.05D;
-	public static double volWaterfallScale = 0.5D;
-	public static double volWindTreesScale = 0.5D;
-	public static double volWindLightningScale = 1D;*/
-	
-	//blocks
+
+
 	public static double sirenActivateDistance = 256D;
-	/*public static double sensorActivateDistance = 256D;
-	public static boolean Block_WeatherMachineNoTornadosOrCyclones = false;
 
-	public static boolean Block_WeatherMachineNoRecipe = false;
-	public static boolean Block_SensorNoRecipe = false;
-	public static boolean Block_SirenNoRecipe = false;
-	public static boolean Block_SirenManualNoRecipe = false;
-	public static boolean Block_WindVaneNoRecipe = false;
-	public static boolean Block_AnemometerNoRecipe = false;
-	public static boolean Block_WeatherForecastNoRecipe = false;
-	public static boolean Block_WeatherDeflectorNoRecipe = false;
-	public static boolean Block_SandLayerNoRecipe = false;
-	public static boolean Block_SandNoRecipe = false;
-	public static boolean Item_PocketSandNoRecipe = false;
-	@ConfigComment("Disabling this recipe will keep them from using other recipes since it depends on this item")
-	public static boolean Item_WeatherItemNoRecipe = false;*/
 
-	
-	//dimension settings
 	public static String Dimension_List_Weather = "minecraft:overworld, tropicraft:tropicraft";
 	public static String Dimension_List_Clouds = "minecraft:overworld, tropicraft:tropicraft";
 	public static String Dimension_List_Storms = "minecraft:overworld, tropicraft:tropicraft";
 	public static String Dimension_List_WindEffects = "minecraft:overworld, tropicraft:tropicraft";
 
-	/*public static boolean Villager_MoveInsideForStorms = true;
-	public static int Villager_MoveInsideForStorms_Dist = 256;
-
-	public static double shaderParticleRateAmplifier = 3D;*/
 
 	public static boolean blockBreakingInvokesCancellableEvent = false;
 
-	/*@ConfigComment("If true, will cancel vanilla behavior of setting clear weather when the player sleeps, for global overcast mode")
-	public static boolean Global_Overcast_Prevent_Rain_Reset_On_Sleep = false;*/
-
-	/*@ConfigComment("Use if you are on a server with weather but want it ALL off client side for performance reasons, overrides basically every client based setting")
-	public static boolean Client_PotatoPC_Mode = false;*/
 
 	@ConfigComment("Server and client side, Locks down the mod to only do wind, leaves, foliage shader if on, etc. No weather systems, turns overcast mode on")
 	public static boolean Aesthetic_Only_Mode = false;
@@ -104,7 +62,7 @@ public class ConfigMisc implements IConfigCategory {
 	public static boolean Winter_Wonderland = false;
 
 	public ConfigMisc() {
-		
+
 	}
 
 	@Override
@@ -129,11 +87,10 @@ public class ConfigMisc implements IConfigCategory {
 
 	@Override
 	public void hookUpdatedValues() {
-		//Weather.dbg("block list processing disabled");
-		//TODO: 1.14 uncomment
-		//WeatherUtil.doBlockList();
+
+
 		WeatherUtilConfig.processLists();
-		
+
 		StormObject.static_YPos_layer0 = Cloud_Layer0_Height;
 		StormObject.static_YPos_layer1 = Cloud_Layer1_Height;
 		StormObject.static_YPos_layer2 = Cloud_Layer2_Height;

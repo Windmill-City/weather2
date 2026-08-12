@@ -30,11 +30,11 @@ public class WindTurbineBlockEntity extends BlockEntity {
 
 	private boolean needsInit = true;
 
-	//private final EnergyManager energyManager;
+
 	private LazyOptional<EnergyManager> energy;
 	private EnergyManager energyManager;
 
-	//amount generated at windspeed of 1, theoretical max windspeed is 2 when tornado right on top of it
+
 	private int maxNormalGenerated = ConfigWind.Wind_Turbine_FE_Generated_Per_Tick;
 	private int capacity = maxNormalGenerated * 2;
 	private int maxTransfer = capacity;
@@ -80,7 +80,7 @@ public class WindTurbineBlockEntity extends BlockEntity {
 			}
 		} else {
 			if (isOutsideCached) {
-				float windSpeed = lastWindSpeed;//WindReader.getWindSpeed(level);
+				float windSpeed = lastWindSpeed;
 				float rotMax = 100F;
 				float maxSpeed = (windSpeed / 2F) * rotMax;
 				if (smoothAngleRotationalVel < maxSpeed) {
@@ -105,7 +105,7 @@ public class WindTurbineBlockEntity extends BlockEntity {
 	}
 
 	public void outputEnergy() {
-		//System.out.println(this.energyManager.getEnergyStored());
+
 		if (this.energyManager.getEnergyStored() >= this.energyManager.getMaxExtract() && this.energyManager.canExtract()) {
 			for (final var direction : Direction.values()) {
 				final BlockEntity be = this.level.getBlockEntity(this.worldPosition.relative(direction));
@@ -116,9 +116,9 @@ public class WindTurbineBlockEntity extends BlockEntity {
 				be.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).ifPresent(storage -> {
 					if (be != this && storage.getEnergyStored() < storage.getMaxEnergyStored()) {
 						this.energyManager.drainEnergy(this.energyManager.getMaxExtract());
-						//Weather.LOGGER.info("Send: {}", this.energyManager.getMaxExtract());
+
 						final int received = storage.receiveEnergy(this.energyManager.getMaxExtract(), false);
-						//Weather.LOGGER.info("Final Received: {}", received);
+
 					}
 				});
 			}

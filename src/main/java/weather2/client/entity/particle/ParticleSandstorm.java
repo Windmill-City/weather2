@@ -15,7 +15,7 @@ public class ParticleSandstorm extends ParticleTexFX {
 	public int heightLayer = 0;
 	public double distAdj = 0;
 	public boolean lockPosition = false;
-	
+
 	public ParticleSandstorm(Level worldIn, double posXIn, double posYIn,
 			double posZIn, double mX, double mY, double mZ,
 			TextureAtlasSprite par8Item) {

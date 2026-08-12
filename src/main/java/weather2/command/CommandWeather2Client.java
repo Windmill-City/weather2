@@ -41,16 +41,8 @@ public class CommandWeather2Client {
 											return Command.SINGLE_SUCCESS;
 										}))
 								)
-								/*.then(literal("particle_reset_frequency")
-										.then(argument("seconds", IntegerArgumentType.integer(0, 20*60*24)).executes(c -> {
-											int value = IntegerArgumentType.getInteger(c, "seconds");
-											ConfigDebug.Particle_Reset_Frequency = value * 20;
-											c.getSource().sendSuccess(() -> Component.literal("Set weather2 particle reset frequency " + value), true);
-											ConfigMod.forceSaveAllFilesFromRuntimeSettings();
-											ConfigMod.forceSaveAllFilesFromRuntimeSettings();
-											return Command.SINGLE_SUCCESS;
-										}))
-								)*/
+
+
 								.then(literal("particle_vanilla_precipitation")
 										.then(argument("value", BoolArgumentType.bool()).executes(c -> {
 											boolean value = BoolArgumentType.getBool(c, "value");
@@ -82,7 +74,7 @@ public class CommandWeather2Client {
 										if (particles != null) {
 											msg(c, "particle type count: " + particles.size());
 											msg(c, "detailed particle info output to log file");
-											//Map<ParticleRenderType, Queue<Particle>> particles = particleEngine.particles;
+
 											int maxCount = 200;
 											int count = 0;
 											CULog.log("outputting particle data:");
@@ -103,14 +95,14 @@ public class CommandWeather2Client {
 									}))
 									.then(literal("particles_vanilla").executes(c -> {
 										ParticleEngine particleEngine = Minecraft.getInstance().particleEngine;
-										//Map<ParticleRenderType, Queue<Particle>> particles = ObfuscationReflectionHelper.getPrivateValue(ParticleEngine.class, particleEngine, "particles");
+
 										msg(c, "total particle count: " + particleEngine.countParticles());
 										msg(c, "emitter count: " + particleEngine.trackingEmitters.size());
 										Map<ParticleRenderType, Queue<Particle>> particles = getParticles();
 										if (particles != null) {
 											msg(c, "particle type count: " + particles.size());
 											msg(c, "detailed particle info output to log file");
-											//Map<ParticleRenderType, Queue<Particle>> particles = particleEngine.particles;
+
 											int maxCount = 200;
 											int count = 0;
 											CULog.log("outputting particle data:");

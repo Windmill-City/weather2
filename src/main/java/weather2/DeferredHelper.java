@@ -51,12 +51,7 @@ public class DeferredHelper {
     protected final String modid;
     protected final Map<ResourceKey<? extends Registry<?>>, List<Registrar<?>>> objects;
 
-    /**
-     * Creates a new DeferredHelper and registers it to the mod event bus.
-     *
-     * @param modid The modid of the owning mod.
-     * @return A new DeferredHelper.
-     */
+
     public static DeferredHelper create(String modid) {
         DeferredHelper helper = new DeferredHelper(modid);
         FMLJavaModLoadingContext.get().getModEventBus().register(helper);
@@ -136,12 +131,7 @@ public class DeferredHelper {
         return this.create(path, Registries.STAT_TYPE, factory);
     }
 
-    /**
-     * Creates a custom stat with the given path and formatter.<br>
-     * Calling {@link StatType#get} on {@link Stats#CUSTOM} is required for full registration, for some reason.
-     *
-     * @see Stats#makeCustomStat
-     */
+
     public RegistryObject<ResourceLocation> customStat(String path, StatFormatter formatter) {
         return this.create(path, Registries.CUSTOM_STAT, () -> {
             ResourceLocation id = new ResourceLocation(this.modid, path);
@@ -179,7 +169,7 @@ public class DeferredHelper {
             RO_updateReference = MethodHandles.lookup().unreflect(m);
         }
         catch (Exception ex) {
-            // Failing means we're using Neo, and RO has been replaced with DH, so this is unnecessary anyway.
+
         }
     }
 

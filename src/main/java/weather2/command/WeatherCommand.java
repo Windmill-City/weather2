@@ -197,24 +197,8 @@ public class WeatherCommand {
 									c.getSource().sendSuccess(() -> Component.literal("Summoned firenado"), true);
 									return Command.SINGLE_SUCCESS;
 								}))
-								/*.then(literal("tornado_player_baby").executes(c -> {
-									StormObject stormObject = summonStorm(c, StormObject.STATE_STAGE1);
 
-									stormObject.setupPlayerControlledTornado(c.getSource().getEntity());
-									stormObject.setPlayerControlledTimeLeft(800);
-									stormObject.setBaby(true);
 
-									c.getSource().sendSuccess(() -> Component.literal("Summoned baby player tornado"), true);
-									return Command.SINGLE_SUCCESS;
-								}))
-								.then(literal("tornado_baby").executes(c -> {
-									StormObject stormObject = summonStorm(c, StormObject.STATE_STAGE1);
-
-									stormObject.setBaby(true);
-
-									c.getSource().sendSuccess(() -> Component.literal("Summoned baby tornado"), true);
-									return Command.SINGLE_SUCCESS;
-								}))*/
 								.then(literal("tornado_player").executes(c -> {
 									StormObject stormObject = summonStorm(c, StormObject.STATE_STAGE1);
 
@@ -223,44 +207,9 @@ public class WeatherCommand {
 
 									c.getSource().sendSuccess(() -> Component.literal("Summoned player tornado"), true);
 									return Command.SINGLE_SUCCESS;
-								}))/*
-								.then(literal("tornado_pet").executes(c -> {
-									StormObject stormObject = summonStorm(c, StormObject.STATE_STAGE1);
-
-									stormObject.setupPlayerControlledTornado(c.getSource().getEntity());
-									stormObject.setPlayerControlledTimeLeft(-1);
-									stormObject.setPet(true);
-									stormObject.setPetGrabsItems(true);
-
-									c.getSource().sendSuccess(() -> Component.literal("Summoned pet tornado"), true);
-									return Command.SINGLE_SUCCESS;
 								}))
-								.then(literal("tornado_pet_no_item_grab").executes(c -> {
-									StormObject stormObject = summonStorm(c, StormObject.STATE_STAGE1);
 
-									stormObject.setupPlayerControlledTornado(c.getSource().getEntity());
-									stormObject.setPlayerControlledTimeLeft(-1);
-									stormObject.setPet(true);
-									stormObject.setPetGrabsItems(false);
 
-									c.getSource().sendSuccess(() -> Component.literal("Summoned pet tornado with no item grabbing"), true);
-									return Command.SINGLE_SUCCESS;
-								}))
-								.then(literal("tornadotestimc").executes(c -> {
-
-									InterModComms.sendTo("weather2", "sharknado", () -> {
-										CompoundTag tag = new CompoundTag();
-										tag.putString("uuid", c.getSource().getEntity().getUUID().toString());
-										tag.putInt("time_ticks", 1200);
-										tag.putBoolean("baby", false);
-										tag.putBoolean("sharknado", true);
-										tag.putString("dimension", c.getSource().getEntity().getLevel().dimension().location().toString());
-										return tag;
-									});
-
-									c.getSource().sendSuccess(() -> Component.literal("Summoned tornado test"), true);
-									return Command.SINGLE_SUCCESS;
-								}))*/
 								.then(literal("tornado_f0_max").executes(c -> {
 									StormObject stormObject = summonStorm(c, StormObject.STATE_FORMING);
 									stormObject.levelStormIntensityMax = StormObject.STATE_FORMING;
@@ -330,7 +279,7 @@ public class WeatherCommand {
 	private static StormObject summonStorm(CommandContext<CommandSourceStack> c, int intensity) {
 		WeatherManagerServer wm = ServerTickHandler.getWeatherManagerFor(c.getSource().getLevel().dimension());
 		StormObject stormObject = new StormObject(wm);
-		
+
 		stormObject.setupStorm(c.getSource().getEntity());
 		stormObject.levelCurIntensityStage = intensity;
 		stormObject.levelStormIntensityMax = intensity;
