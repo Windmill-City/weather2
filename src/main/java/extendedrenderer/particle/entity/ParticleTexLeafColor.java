@@ -1,72 +1,64 @@
 package extendedrenderer.particle.entity;
 
-import com.corosus.coroutil.util.CoroUtilColor;
-import com.corosus.coroutil.util.CoroUtilMisc;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.block.BlockColors;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.BlockPos;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.concurrent.ConcurrentHashMap;
+import com.corosus.coroutil.util.CoroUtilColor;
+import com.corosus.coroutil.util.CoroUtilMisc;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.color.block.BlockColors;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.block.state.BlockState;
 
 public class ParticleTexLeafColor extends ParticleTexFX {
 
-
 	private static BlockColors colors;
 
-
 	private static ConcurrentHashMap<BlockState, int[]> colorCache = new ConcurrentHashMap<>();
-
 
 	public float rotationYawMomentum;
 	public float rotationPitchMomentum;
 
 	public ParticleTexLeafColor(ClientLevel worldIn, double posXIn, double posYIn,
-								double posZIn, double mX, double mY, double mZ,
-								TextureAtlasSprite par8Item) {
+			double posZIn, double mX, double mY, double mZ,
+			TextureAtlasSprite par8Item) {
 		super(worldIn, posXIn, posYIn, posZIn, mX, mY, mZ, par8Item);
 
 		if (colors == null) {
-		    colors = Minecraft.getInstance().getBlockColors();
-
+			colors = Minecraft.getInstance().getBlockColors();
 
 		}
 
-		BlockPos pos = new BlockPos((int)Math.floor(posXIn), (int)Math.floor(posYIn), (int)Math.floor(posZIn));
+		BlockPos pos = new BlockPos((int) Math.floor(posXIn), (int) Math.floor(posYIn), (int) Math.floor(posZIn));
 		BlockState state = worldIn.getBlockState(pos);
 
-
-		int multiplier = this.colors.getColor(state, this.level, pos, 0);
-
+		int multiplier = ParticleTexLeafColor.colors.getColor(state, this.level, pos, 0);
 
 		int[] colors = colorCache.get(state);
 		if (colors == null) {
 
+			colors = CoroUtilColor.getColors(state);
 
-		    colors = CoroUtilColor.getColors(state);
-
-		    if (colors.length == 0) {
-
+			if (colors.length == 0) {
 
 				if (!hasColor(state) || (multiplier & 0xFFFFFF) == 0xFFFFFF) {
 					multiplier = 5811761;
 				}
 
-
 				colors = new int[] { 0x00FF00 };
-		    }
+			}
 
 			if (colors.length > 1) {
 				while (colors[colors.length - 1] == colors[colors.length - 2]) {
 					colors = ArrayUtils.remove(colors, colors.length - 1);
 				}
 			}
-		    colorCache.put(state, colors);
+			colorCache.put(state, colors);
 		}
-
 
 		int randMax = 1 << (colors.length - 1);
 		int choice = 32 - Integer.numberOfLeadingZeros(CoroUtilMisc.random.nextInt(randMax));
@@ -84,7 +76,6 @@ public class ParticleTexLeafColor extends ParticleTexFX {
 	@Override
 	public void tick() {
 		super.tick();
-
 
 		if (isCollidedVerticallyDownwards && random.nextInt(10) == 0) {
 			double speed = Math.sqrt(this.xd * this.xd + this.zd * this.zd);

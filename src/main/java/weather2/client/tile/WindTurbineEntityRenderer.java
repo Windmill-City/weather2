@@ -1,7 +1,10 @@
 package weather2.client.tile;
 
+import java.util.Map;
+
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
@@ -12,14 +15,10 @@ import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import weather2.Weather;
-import weather2.WeatherBlocks;
 import weather2.blockentity.WindTurbineBlockEntity;
 import weather2.client.entity.model.WindTurbineModel;
-
-import java.util.Map;
 
 public class WindTurbineEntityRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
 
@@ -46,23 +45,24 @@ public class WindTurbineEntityRenderer<T extends BlockEntity> implements BlockEn
         return new ResourceLocation(Weather.MODID, path);
     }
 
-    public static void renderModel(final Material material, final Model model, PoseStack stack, MultiBufferSource buffer, int combinedLightIn, int combinedOverlayIn) {
-        model.renderToBuffer(stack, buffer.getBuffer(model.renderType(material.texture())), combinedLightIn, combinedOverlayIn, 1, 1, 1, 1);
+    public static void renderModel(final Material material, final Model model, PoseStack stack,
+            MultiBufferSource buffer, int combinedLightIn, int combinedOverlayIn) {
+        model.renderToBuffer(stack, buffer.getBuffer(model.renderType(material.texture())), combinedLightIn,
+                combinedOverlayIn, 1, 1, 1, 1);
     }
 
-    private final Block block;
-    protected final WindTurbineModel model;
+    protected final WindTurbineModel<?> model;
 
     public WindTurbineEntityRenderer(final BlockEntityRendererProvider.Context context) {
         super();
-        this.block = WeatherBlocks.BLOCK_WIND_TURBINE.get();
-        this.model = new WindTurbineModel<>(Minecraft.getInstance().getEntityModels().bakeLayer(WindTurbineModel.LAYER_LOCATION));
+        this.model = new WindTurbineModel<>(
+                Minecraft.getInstance().getEntityModels().bakeLayer(WindTurbineModel.LAYER_LOCATION));
     }
 
     @Override
-    public void render(T te, float partialTicks, PoseStack stack, MultiBufferSource buffer, int combinedLightIn, int combinedOverlayIn) {
+    public void render(T te, float partialTicks, PoseStack stack, MultiBufferSource buffer, int combinedLightIn,
+            int combinedOverlayIn) {
         this.model.root().getAllParts().forEach(ModelPart::resetPose);
-
 
         ModelPart root = this.model.root();
         root.x += 8;
@@ -71,12 +71,12 @@ public class WindTurbineEntityRenderer<T extends BlockEntity> implements BlockEn
         root.xRot += Math.toRadians(180);
         root.yRot += Math.toRadians(180);
 
-
         root.y += 16;
 
         ModelPart top = this.model.root().getChild("root").getChild("shaft");
         if (top != null) {
-            float lerpAngle = (float) Mth.lerp((double)partialTicks, ((WindTurbineBlockEntity) te).smoothAnglePrev, ((WindTurbineBlockEntity) te).smoothAngle);
+            float lerpAngle = (float) Mth.lerp((double) partialTicks, ((WindTurbineBlockEntity) te).smoothAnglePrev,
+                    ((WindTurbineBlockEntity) te).smoothAngle);
             float renderAngle = lerpAngle;
 
             top.yRot = (float) Math.toRadians(renderAngle);

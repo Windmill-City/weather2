@@ -12,12 +12,10 @@ import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import org.joml.Vector3f;
 import weather2.ClientTickHandler;
 import weather2.Weather;
-import weather2.WeatherBlocks;
 import weather2.blockentity.WindVaneBlockEntity;
 import weather2.client.entity.model.WindVaneModel;
 import weather2.weathersystem.WeatherManagerClient;
@@ -55,12 +53,10 @@ public class WindVaneEntityRenderer<T extends BlockEntity> implements BlockEntit
         model.renderToBuffer(stack, buffer.getBuffer(model.renderType(material.texture())), combinedLightIn, combinedOverlayIn, 1, 1, 1, 1);
     }
 
-    private final Block block;
     protected final WindVaneModel model;
 
     public WindVaneEntityRenderer(final BlockEntityRendererProvider.Context context) {
         super();
-        this.block = WeatherBlocks.BLOCK_WIND_VANE.get();
         this.model = new WindVaneModel<>(Minecraft.getInstance().getEntityModels().bakeLayer(WindVaneModel.LAYER_LOCATION));
     }
 

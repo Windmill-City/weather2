@@ -1,5 +1,9 @@
 package weather2.block;
 
+import java.util.List;
+
+import org.jetbrains.annotations.Nullable;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -18,17 +22,15 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.jetbrains.annotations.Nullable;
 import weather2.WeatherBlocks;
 import weather2.blockentity.AnemometerBlockEntity;
-
-import java.util.List;
 
 public class AnemometerBlock extends BaseEntityBlock {
 
 	public static final VoxelShape SHAPE = box(6.0, 0.0, 6.0, 10.0, 16.0, 10.0);
 
-    public static final void register() {}
+	public static final void register() {
+	}
 
 	public AnemometerBlock(Properties properties) {
 		super(properties);
@@ -40,7 +42,6 @@ public class AnemometerBlock extends BaseEntityBlock {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		return SHAPE;
 	}
@@ -65,7 +66,8 @@ public class AnemometerBlock extends BaseEntityBlock {
 
 	@Nullable
 	@Override
-	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_, BlockEntityType<T> p_153214_) {
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_,
+			BlockEntityType<T> p_153214_) {
 		return createTickerHelper(p_153214_, WeatherBlocks.BLOCK_ENTITY_ANEMOMETER.get(), AnemometerBlockEntity::tick);
 	}
 }

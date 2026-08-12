@@ -66,19 +66,16 @@ public class SensorBlock extends BaseEntityBlock {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public int getSignal(BlockState pState, BlockGetter pLevel, BlockPos pPos, Direction pDirection) {
 		return pState.getValue(POWERED) ? 15 : 0;
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public int getDirectSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
 		return pBlockState.getValue(POWERED) ? 15 : 0;
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public boolean isSignalSource(BlockState pState) {
 		return true;
 	}

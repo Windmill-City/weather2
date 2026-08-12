@@ -1,7 +1,11 @@
 package weather2.client.tile;
 
+import java.util.Map;
+import java.util.Random;
+
 import com.google.common.collect.Maps;
 import com.mojang.blaze3d.vertex.PoseStack;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
@@ -12,18 +16,13 @@ import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import weather2.ClientTickHandler;
 import weather2.Weather;
-import weather2.WeatherBlocks;
 import weather2.blockentity.AnemometerBlockEntity;
 import weather2.client.entity.model.AnemometerModel;
 import weather2.weathersystem.WeatherManagerClient;
 import weather2.weathersystem.wind.WindManager;
-
-import java.util.Map;
-import java.util.Random;
 
 public class AnemometerEntityRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
 
@@ -50,23 +49,24 @@ public class AnemometerEntityRenderer<T extends BlockEntity> implements BlockEnt
         return new ResourceLocation(Weather.MODID, path);
     }
 
-    public static void renderModel(final Material material, final Model model, PoseStack stack, MultiBufferSource buffer, int combinedLightIn, int combinedOverlayIn) {
-        model.renderToBuffer(stack, buffer.getBuffer(model.renderType(material.texture())), combinedLightIn, combinedOverlayIn, 1, 1, 1, 1);
+    public static void renderModel(final Material material, final Model model, PoseStack stack,
+            MultiBufferSource buffer, int combinedLightIn, int combinedOverlayIn) {
+        model.renderToBuffer(stack, buffer.getBuffer(model.renderType(material.texture())), combinedLightIn,
+                combinedOverlayIn, 1, 1, 1, 1);
     }
 
-    private final Block block;
-    protected final AnemometerModel model;
+    protected final AnemometerModel<?> model;
 
     public AnemometerEntityRenderer(final BlockEntityRendererProvider.Context context) {
         super();
-        this.block = WeatherBlocks.BLOCK_ANEMOMETER.get();
-        this.model = new AnemometerModel<>(Minecraft.getInstance().getEntityModels().bakeLayer(AnemometerModel.LAYER_LOCATION));
+        this.model = new AnemometerModel<>(
+                Minecraft.getInstance().getEntityModels().bakeLayer(AnemometerModel.LAYER_LOCATION));
     }
 
     @Override
-    public void render(T te, float partialTicks, PoseStack stack, MultiBufferSource buffer, int combinedLightIn, int combinedOverlayIn) {
+    public void render(T te, float partialTicks, PoseStack stack, MultiBufferSource buffer, int combinedLightIn,
+            int combinedOverlayIn) {
         this.model.root().getAllParts().forEach(ModelPart::resetPose);
-
 
         ModelPart root = this.model.root();
         root.x += 8;
@@ -79,11 +79,14 @@ public class AnemometerEntityRenderer<T extends BlockEntity> implements BlockEnt
         ModelPart top = this.model.root().getChild("base").getChild("top");
         if (top != null) {
             WeatherManagerClient weatherMan = ClientTickHandler.weatherManager;
-            if (weatherMan == null) return;
+            if (weatherMan == null)
+                return;
             WindManager windMan = weatherMan.getWindManager();
-            if (windMan == null) return;
+            if (windMan == null)
+                return;
 
-            float lerpAngle = (float) Mth.lerp((double)partialTicks, ((AnemometerBlockEntity) te).smoothAnglePrev, ((AnemometerBlockEntity) te).smoothAngle);
+            float lerpAngle = (float) Mth.lerp((double) partialTicks, ((AnemometerBlockEntity) te).smoothAnglePrev,
+                    ((AnemometerBlockEntity) te).smoothAngle);
             float renderAngle = lerpAngle;
 
             top.yRot = (float) Math.toRadians(renderAngle);

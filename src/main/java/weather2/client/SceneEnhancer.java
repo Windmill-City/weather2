@@ -217,7 +217,6 @@ public class SceneEnhancer implements Runnable {
 	        	Player player = client.player;
 
 	        	int size = 32;
-	            int hsize = size / 2;
 	            BlockPos cur = player.blockPosition();
 
 	            Random rand = new Random();
