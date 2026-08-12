@@ -138,7 +138,7 @@ public class WeatherObjectSandstormOld extends WeatherObject {
 	
 	@Override
 	public int getUpdateRateForNetwork() {
-		return 1;
+		return 100;
 	}
 	
 	@Override

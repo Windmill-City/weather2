@@ -176,14 +176,8 @@ public class ServerTickHandler {
 	}
 
 	@SubscribeEvent
-	public static void tickPlayer(TickEvent.PlayerTickEvent event) {
-		if (!event.player.level().isClientSide()) {
-			syncServerConfigToClient(event.player);
-		}
-	}
-
 	public static void joinPlayer(PlayerEvent.PlayerLoggedInEvent event) {
-
+		syncServerConfigToClient(event.getEntity());
 	}
 
 	public static WeatherManagerServer getWeatherManagerFor(ResourceKey<Level> dimension) {

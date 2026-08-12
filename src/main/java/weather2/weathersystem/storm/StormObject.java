@@ -1049,7 +1049,7 @@ public class StormObject extends WeatherObject {
 
 					LightningBoltWeatherNew ent = new LightningBoltWeatherNew(EntityRegistry.LIGHTNING_BOLT.get(), world);
 					ent.setPos(x + 0.5, y, z + 0.5);
-					addWeatherEffectLightning(ent, false);
+					addWeatherEffectLightning(ent);
 				}
 			}
 		}
@@ -2969,15 +2969,14 @@ public class StormObject extends WeatherObject {
 		}
 	}
 	
-	public void addWeatherEffectLightning(LightningBoltWeatherNew parEnt, boolean custom) {
+	public void addWeatherEffectLightning(LightningBoltWeatherNew parEnt) {
 		manager.getWorld().addFreshEntity(parEnt);
-		((WeatherManagerServer)manager).syncLightningNew(parEnt, custom);
 	}
 	
 	@Override
 	public int getUpdateRateForNetwork() {
 		if (levelCurIntensityStage >= StormObject.STATE_HIGHWIND) {
-			return 2;
+			return 10;
 		} else {
 			return super.getUpdateRateForNetwork();
 		}

@@ -9,7 +9,6 @@ import net.minecraft.server.level.ChunkHolder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -312,8 +311,6 @@ public class WeatherManagerServer extends WeatherManager {
 			//if (ConfigMisc.overcastMode) {
 			if (world.getGameTime() % 40 == 0) {
 				isVanillaRainActiveOnServer = world.isRaining();
-				isVanillaThunderActiveOnServer = world.isThundering();
-				vanillaRainTimeOnServer = world.serverLevelData.getRainTime();
 				float minRain = 0;
 				float maxRain = 0;
 				if (world.isThundering()) {
@@ -628,21 +625,6 @@ public class WeatherManagerServer extends WeatherManager {
 		}
 	}*/
 
-	public void syncLightningNew(Entity parEnt, boolean custom) {
-		CompoundTag data = new CompoundTag();
-		data.putString("packetCommand", "WeatherData");
-		data.putString("command", "syncLightningNew");
-		CompoundTag nbt = new CompoundTag();
-		nbt.putInt("posX", Mth.floor(parEnt.getX()));
-		nbt.putInt("posY", Mth.floor(parEnt.getY()));
-		nbt.putInt("posZ", Mth.floor(parEnt.getZ()));
-		nbt.putInt("entityID", parEnt.getId());
-		nbt.putBoolean("custom", custom);
-		data.put("data", nbt);
-
-		WeatherNetworking.HANDLER.send(PacketDistributor.DIMENSION.with(() -> getWorld().dimension()), new PacketNBTFromServer(data));
-	}
-
 	public void syncBlockParticleNew(BlockPos pos, BlockState state, WeatherObject owner) {
 		CompoundTag data = new CompoundTag();
 		data.putString("packetCommand", "WeatherData");
@@ -716,8 +698,6 @@ public class WeatherManagerServer extends WeatherManager {
 		data.putString("packetCommand", "WeatherData");
 		data.putString("command", "syncWeatherUpdate");
 		data.putBoolean("isVanillaRainActiveOnServer", isVanillaRainActiveOnServer);
-		data.putBoolean("isVanillaThunderActiveOnServer", isVanillaThunderActiveOnServer);
-		data.putInt("vanillaRainTimeOnServer", vanillaRainTimeOnServer);
 		data.putFloat("vanillaRainAmountOnServer", vanillaRainAmountOnServer);
 		WeatherNetworking.HANDLER.send(PacketDistributor.DIMENSION.with(() -> getWorld().dimension()), new PacketNBTFromServer(data));
 	}
