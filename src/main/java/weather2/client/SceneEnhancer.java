@@ -629,10 +629,8 @@ public class SceneEnhancer implements Runnable {
 
 							BlockState state = world.getBlockState(pos);
 							double maxY = 0;
-							double minY = 0;
 							VoxelShape shape = state.getShape(world, pos);
 							if (!shape.isEmpty()) {
-								minY = shape.bounds().minY;
 								maxY = shape.bounds().maxY;
 							}
 
