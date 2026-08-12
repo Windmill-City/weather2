@@ -7,8 +7,8 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Matrix4f;
@@ -65,10 +65,6 @@ public class LightningBoltWeatherNewRenderer extends EntityRenderer<LightningBol
                   f3 += (float)(random1.nextInt(31) - 15);
                }
 
-               float f6 = 0.5F;
-               float f7 = 0.45F;
-               float f8 = 0.45F;
-               float f9 = 0.5F;
                float f10 = 0.1F + (float)j * 0.2F;
                if (k == 0) {
                   f10 *= (float)j1 * 0.1F + 1.0F;
@@ -97,6 +93,6 @@ public class LightningBoltWeatherNewRenderer extends EntityRenderer<LightningBol
    }
 
    public ResourceLocation getTextureLocation(LightningBoltWeatherNew p_115264_) {
-      return TextureAtlas.LOCATION_BLOCKS;
+      return InventoryMenu.BLOCK_ATLAS;
    }
 }

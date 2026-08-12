@@ -1,14 +1,11 @@
 package weather2.data;
 
-import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.world.item.Items;
-import weather2.Weather;
-import weather2.WeatherBlocks;
 import weather2.WeatherItems;
 
 import java.util.function.Consumer;

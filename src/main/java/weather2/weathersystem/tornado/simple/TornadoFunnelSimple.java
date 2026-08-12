@@ -138,7 +138,6 @@ public class TornadoFunnelSimple {
 
     @OnlyIn(Dist.CLIENT)
     public void tickClient() {
-        long gameTime = stormObject.getAge();
 
         Level level = stormObject.manager.getWorld();
 

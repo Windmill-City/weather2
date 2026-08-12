@@ -1,6 +1,5 @@
 package weather2;
 
-import com.corosus.coroutil.util.CULog;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;

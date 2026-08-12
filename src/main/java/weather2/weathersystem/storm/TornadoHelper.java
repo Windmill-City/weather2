@@ -218,9 +218,6 @@ public class TornadoHelper {
 		if (!parWorld.isClientSide() && !Weather.isLoveTropicsInstalled() && (ConfigTornado.Storm_Tornado_grabBlocks || storm.isFirenado))
 		{
 
-			int yStart = 0;
-			int yEnd = (int)storm.pos.y;
-			int yInc = 1;
 			Biome bgb = parWorld.getBiome(new BlockPos(WeatherUtilBlock.getPrecipitationHeightSafe(parWorld, new BlockPos(Mth.floor(storm.pos.x), 0, Mth.floor(storm.pos.z))))).get();
 
 
@@ -627,7 +624,6 @@ public class TornadoHelper {
 
         List list = parWorld.getEntitiesOfClass(Entity.class, aabb);
         boolean foundEnt = false;
-        int killCount = 0;
 
         if (list != null)
         {

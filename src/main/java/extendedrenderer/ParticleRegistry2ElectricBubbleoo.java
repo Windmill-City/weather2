@@ -1,7 +1,5 @@
 package extendedrenderer;
 
-import weather2.DeferredHelper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.WaterDropParticle;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraftforge.api.distmarker.Dist;
@@ -24,7 +22,7 @@ public class ParticleRegistry2ElectricBubbleoo {
     @OnlyIn(Dist.CLIENT)
     public static void factories(RegisterParticleProvidersEvent event) {
 
-        Minecraft.getInstance().particleEngine.register(new SimpleParticleType(false), WaterDropParticle.Provider::new);
+        event.registerSpriteSet(new SimpleParticleType(false), WaterDropParticle.Provider::new);
 
     }
 

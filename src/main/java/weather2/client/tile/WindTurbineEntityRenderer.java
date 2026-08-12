@@ -8,25 +8,18 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import org.joml.Vector3f;
-import weather2.ClientTickHandler;
 import weather2.Weather;
 import weather2.WeatherBlocks;
 import weather2.blockentity.WindTurbineBlockEntity;
-import weather2.blockentity.WindVaneBlockEntity;
 import weather2.client.entity.model.WindTurbineModel;
-import weather2.client.entity.model.WindVaneModel;
-import weather2.weathersystem.WeatherManagerClient;
-import weather2.weathersystem.wind.WindManager;
 
 import java.util.Map;
-import java.util.Random;
 
 public class WindTurbineEntityRenderer<T extends BlockEntity> implements BlockEntityRenderer<T> {
 
@@ -38,7 +31,7 @@ public class WindTurbineEntityRenderer<T extends BlockEntity> implements BlockEn
     }
 
     private static Material createTEMaterial(final String path) {
-        return new Material(TextureAtlas.LOCATION_BLOCKS, getTextureTE(path));
+        return new Material(InventoryMenu.BLOCK_ATLAS, getTextureTE(path));
     }
 
     public static ResourceLocation getTextureTE(String path) {

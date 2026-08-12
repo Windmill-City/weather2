@@ -12,12 +12,10 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Dolphin;
@@ -35,13 +33,11 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.LogicalSide;
 import net.minecraftforge.fml.util.thread.EffectiveSide;
-import net.minecraftforge.registries.ForgeRegistries;
 import weather2.EntityRegistry;
 import weather2.ServerTickHandler;
 import weather2.Weather;
 import weather2.client.SceneEnhancer;
 import weather2.config.*;
-import weather2.player.PlayerData;
 import weather2.util.*;
 import weather2.weathersystem.WeatherManager;
 import weather2.weathersystem.WeatherManagerServer;
@@ -531,8 +527,6 @@ public class StormObject extends WeatherObject {
 
 					ent.setScale(800 * 0.15F);
 
-					double countPerLayer = 16;
-					double rotPos = i % 16;
 					int layerRot = i / 16;
 					double spawnRad = 80;
 					if (layerRot == 1) {
@@ -1060,7 +1054,7 @@ public class StormObject extends WeatherObject {
 				BlockState state = world.getBlockState(tryPos);
 				if (!CoroUtilBlock.isAir(state.getBlock())) {
 
-					if (state.liquid()) {
+					if (!state.getFluidState().isEmpty()) {
 						isOverWater = true;
 					}
 				}
@@ -2009,7 +2003,6 @@ if (isCycloneFormingOrGreater()) {
 				double curSpeed = Math.sqrt(ent.getMotionX() * ent.getMotionX() + ent.getMotionY() * ent.getMotionY() + ent.getMotionZ() * ent.getMotionZ());
 
 				double speed = Math.max(0.2F, 5F * spinSpeed) + (rand.nextDouble() * 0.01D);
-				double distt = size;
 
 
 				double vecX = ent.getPosX() - pos.x;
@@ -2031,11 +2024,7 @@ if (isCycloneFormingOrGreater()) {
 		        	ent.remove();
 		        }
 
-	        	double var16 = this.pos.x - ent.getPosX();
-                double var18 = this.pos.z - ent.getPosZ();
-
-
-                if (curSpeed < speed * 20D) {
+	        	                if (curSpeed < speed * 20D) {
 		        	ent.setMotionX(ent.getMotionX() + -Math.sin(Math.toRadians(angle)) * speed);
 			        ent.setMotionZ(ent.getMotionZ() + Math.cos(Math.toRadians(angle)) * speed);
 		        }
@@ -2702,7 +2691,7 @@ if (isCycloneFormingOrGreater()) {
 
 
 		boolean filterOutLogs = true;
-		if (filterOutLogs && world.hasChunkAt(CoroUtilBlock.blockPos(pos))) {
+		if (filterOutLogs && world.isLoaded(CoroUtilBlock.blockPos(pos))) {
 			int y = calculatedYPos-1;
 			BlockState state = world.getBlockState(CoroUtilBlock.blockPos(pos.x, y, pos.z));
 
@@ -2758,10 +2747,6 @@ if (isCycloneFormingOrGreater()) {
 
 	public void setupTornadoAwayFromPlayersAimAtPlayers() {
 		List<? extends Player> players = manager.getWorld().players();
-		List<Player> playersNear = new ArrayList<>();
-		double xAdd = 0;
-		double yAdd = 0;
-		double zAdd = 0;
 		Vec3 vecAdd = new Vec3(0, 0, 0);
 		for (Player player : players) {
 			vecAdd = vecAdd.add(player.position());

@@ -355,8 +355,6 @@ public class WeatherManagerServer extends WeatherManager {
 
 			if (!world.isLoaded(pos)) continue;
 
-			Biome biomeIn = world.getBiome(pos).get();
-
 			if (force || WeatherObjectParticleStorm.canSpawnHere(world, pos, type, true)) {
 
 				foundPos = pos;

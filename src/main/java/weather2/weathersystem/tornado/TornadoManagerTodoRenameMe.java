@@ -7,12 +7,10 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec2;
-import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Quaternionf;
 import org.joml.Vector3d;
 import org.joml.Vector3f;
-import weather2.weathersystem.tornado.simple.TornadoFunnelSimple;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,14 +18,10 @@ import java.util.List;
 
 public class TornadoManagerTodoRenameMe {
 
-    private Class lastScreenClass = null;
-
     private ParticleTexFX particleTest = null;
     private List<ParticleTexFX> particles = new ArrayList<>();
 
     private TornadoFunnel funnel;
-
-    private TornadoFunnelSimple funnelSimple;
 
 
     public List<CubicBezierCurve> curves = new ArrayList<>();
@@ -63,8 +57,6 @@ public class TornadoManagerTodoRenameMe {
 
                         particles.add(particleTest);
                     }
-
-                    int testY = 100;
 
                     Vector3f pos1 = new Vector3f(0.5F, 70, 0.5F);
                     Vector3f pos2 = new Vector3f(0.5F, 120, 0.5F);
@@ -105,7 +97,6 @@ public class TornadoManagerTodoRenameMe {
 
 
                     if (bezierCurve != null && true) {
-                        float randScale = 0.1F;
                         for (int i = 0; i < bezierCurve.P.length; i++) {
                             if (vecSpeeds[i] == null) {
                                 vecSpeeds[i] = new Vector3f(world.random.nextFloat(), world.random.nextFloat(), world.random.nextFloat());
@@ -167,14 +158,9 @@ public class TornadoManagerTodoRenameMe {
 
                             y = vecAngles.y() - 90;
 
-                            int yDiff = (index / particleCountCircle) - (particleCountLayers / 2);
-                            float yDiffDist = 0.01F;
-
                             int curLayer = (index / particleCountCircle);
                             float curvePoint = (float)curLayer / (float)particleCountLayers * 1F;
                             float curvePoint2 = (float)Math.min(1D, (float)(curLayer+1) / (float)particleCountLayers) * 1F;
-                            float stretchCurveY = 4F;
-                            float curveAmp = 2F;
                             y2 = ((world.getGameTime() * (7 + (particleCountLayers - curLayer) * (particleCountLayers - curLayer) * 0.02F)) % 360) + ((index % particleCountCircle) * (360 / particleCountCircle));
 
 
@@ -199,9 +185,6 @@ public class TornadoManagerTodoRenameMe {
                             Quaternionf quaternionYCircle = new Quaternionf(0.0F, 1.0F, 0.0F, Math.toRadians(-y2 + (curvePointYawPitch.x - 90)));
 
                             Quaternionf quatPitch = new Quaternionf(1.0F, 0.0F, 0.0F, Math.toRadians(curvePointYawPitch.y));
-
-
-                            Vector3f vecCurve = getCurveValue(curvePoint);
 
 
                             Vector3f vecNew = new Vector3f(1, 0F, 0);
@@ -266,7 +249,6 @@ public class TornadoManagerTodoRenameMe {
         double xx = pos1.x() - pos2.x();
         double zz = pos1.z() - pos2.z();
         double xzDist = Math.sqrt(xx * xx + zz * zz);
-        double wat = xzDist / dist;
         float pitchAngle = (float)Math.toDegrees(Math.atan2(vecDiff.y(), xzDist / dist));
 
         vecAngles = new Vector3f((float)Math.toDegrees(vecAngles.x()), (float)Math.toDegrees(vecAngles.y()), (float)Math.toDegrees(vecAngles.z()));

@@ -69,9 +69,6 @@ public class CubicBezierCurve {
         terms[7] = calcNewVector(mn * one_minus_t * one_minus_t * t * t * t * t * t * t * t, P[7]);
         terms[8] = calcNewVector(mn * one_minus_t * t * t * t * t * t * t * t * t, P[8]);
         terms[9] = calcNewVector(t * t * t * t * t * t * t * t * t, P[9]);
-        if (t > 0.8F) {
-            int awt = 0;
-        }
         for (int i = 0; i < 10; i++) {
             retValue.add(terms[i]);
         }

@@ -1,6 +1,5 @@
 package weather2.config;
 
-import com.corosus.coroutil.config.ConfigCoroUtil;
 import com.corosus.modconfig.ConfigComment;
 import com.corosus.modconfig.IConfigCategory;
 import weather2.Weather;

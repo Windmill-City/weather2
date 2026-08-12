@@ -11,10 +11,10 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.TextureSheetParticle;
 import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
@@ -33,7 +33,6 @@ import weather2.weathersystem.WeatherManagerClient;
 import weather2.weathersystem.wind.WindManager;
 
 import java.util.List;
-import java.util.stream.Stream;
 
 @OnlyIn(Dist.CLIENT)
 public class EntityRotFX extends TextureSheetParticle implements IWindHandler
@@ -65,7 +64,7 @@ public class EntityRotFX extends TextureSheetParticle implements IWindHandler
             RenderSystem.disableBlend();
             RenderSystem.depthMask(true);
             RenderSystem.setShader(GameRenderer::getParticleShader);
-            RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
+            RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
             p_217600_1_.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.PARTICLE);
         }
 

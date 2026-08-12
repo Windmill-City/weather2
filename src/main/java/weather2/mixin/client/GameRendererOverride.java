@@ -9,6 +9,11 @@ import org.spongepowered.asm.mixin.Overwrite;
 public abstract class GameRendererOverride {
 
 
+    /**
+     * Overrides the far render distance so weather effects render beyond the normal view distance.
+     * @author Corosus
+     * @reason Weather2 needs a larger depth far plane so storms and particles are visible at range.
+     */
     @Overwrite
     public float getDepthFar() {
 

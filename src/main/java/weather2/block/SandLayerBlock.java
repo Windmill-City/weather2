@@ -33,6 +33,7 @@ public class SandLayerBlock extends Block {
       this.registerDefaultState(this.stateDefinition.any().setValue(LAYERS, Integer.valueOf(1)));
    }
 
+   @SuppressWarnings("deprecation")
    public boolean isPathfindable(BlockState state, BlockGetter worldIn, BlockPos pos, PathComputationType type) {
       switch(type) {
       case LAND:
@@ -46,26 +47,32 @@ public class SandLayerBlock extends Block {
       }
    }
 
+   @SuppressWarnings("deprecation")
    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
       return SHAPES[state.getValue(LAYERS)];
    }
 
+   @SuppressWarnings("deprecation")
    public VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
       return SHAPES[state.getValue(LAYERS) - 1];
    }
 
+   @SuppressWarnings("deprecation")
    public VoxelShape getBlockSupportShape(BlockState state, BlockGetter reader, BlockPos pos) {
       return SHAPES[state.getValue(LAYERS)];
    }
 
+   @SuppressWarnings("deprecation")
    public VoxelShape getVisualShape(BlockState state, BlockGetter reader, BlockPos pos, CollisionContext context) {
       return SHAPES[state.getValue(LAYERS)];
    }
 
+   @SuppressWarnings("deprecation")
    public boolean useShapeForLightOcclusion(BlockState state) {
       return true;
    }
 
+   @SuppressWarnings("deprecation")
    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
       BlockState blockstate = worldIn.getBlockState(pos.below());
       if (!blockstate.is(Blocks.ICE) && !blockstate.is(Blocks.PACKED_ICE) && !blockstate.is(Blocks.BARRIER)) {
@@ -80,6 +87,7 @@ public class SandLayerBlock extends Block {
    }
 
 
+   @SuppressWarnings("deprecation")
    public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
       return !stateIn.canSurvive(worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
    }
@@ -93,6 +101,7 @@ public class SandLayerBlock extends Block {
 
    }
 
+   @SuppressWarnings("deprecation")
    public boolean canBeReplaced(BlockState state, BlockPlaceContext useContext) {
       int i = state.getValue(LAYERS);
       return i == 1;

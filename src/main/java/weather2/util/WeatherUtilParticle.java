@@ -1,13 +1,10 @@
 package weather2.util;
 
 import java.lang.reflect.Field;
-import java.util.ArrayDeque;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Random;
 
-import com.corosus.coroutil.util.CoroUtilEntOrParticle;
-import com.google.common.collect.Maps;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.client.particle.Particle;
@@ -47,6 +44,7 @@ public class WeatherUtilParticle {
     }
 
     @OnlyIn(Dist.CLIENT)
+    @SuppressWarnings("unchecked")
     public static void getFXLayers()
     {
 

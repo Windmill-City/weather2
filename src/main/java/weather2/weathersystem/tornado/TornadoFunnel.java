@@ -9,7 +9,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Quaternionf;
 import org.joml.Vector3d;
@@ -22,7 +21,7 @@ public class TornadoFunnel {
 
     public Vector3d pos = new Vector3d(0, 0, 0);
 
-    public LinkedList<FunnelPiece> listFunnel = new LinkedList();
+    public LinkedList<FunnelPiece> listFunnel = new LinkedList<>();
 
 
     public int amountPerLayer = 30;
@@ -163,7 +162,6 @@ public class TornadoFunnel {
     private void tickUpdateFunnel() {
 
         Level world = Minecraft.getInstance().level;
-        Player player = Minecraft.getInstance().player;
 
 
         for (int ii = 0; ii < listFunnel.size(); ii++) {
@@ -176,11 +174,6 @@ public class TornadoFunnel {
             Random rand = new Random();
 
             piece.posEnd.add(new Vector3d(rate * piece.vecDirX, 0, rate * piece.vecDirZ * 0.7));
-
-
-            int offset = 360 / listFunnel.size();
-            long timeC = (world.getGameTime() * (ii+1) + (offset * ii)) * 1;
-            float range = 35F;
 
 
             float speedAmp = 0.3F;
@@ -219,11 +212,6 @@ public class TornadoFunnel {
 
             double dist = distanceTo(piece.posStart, piece.posEnd);
 
-            double x1 = piece.posEnd.x - piece.posStart.x;
-            double y1 = piece.posEnd.y - piece.posStart.y;
-            double z1 = piece.posEnd.z - piece.posStart.z;
-            Vector3d vec = new Vector3d(x1 / dist, y1 / dist, z1 / dist);
-
             double sizeXYParticle = 1;
             double funnelRadius = 3;
 
@@ -245,17 +233,10 @@ public class TornadoFunnel {
                     int particleCountCircle = 20;
                     int particleCountLayers = 40;
 
-                    int yIndex = index / amountPerLayer;
-                    int rotIndex = index % amountPerLayer;
-                    int yCount = particleCount / amountPerLayer;
-
                     float x = 0;
                     float y = ((index % particleCountCircle) * (360 / particleCountCircle));
                     float y2 = ((world.getGameTime() * 3) % 360) + ((index % particleCountCircle) * (360 / particleCountCircle));
                     float z = 0;
-
-
-                    int testY = 100;
 
 
                     float dist2 = (float)Math.sqrt(distanceTo(piece.posStart, piece.posEnd));

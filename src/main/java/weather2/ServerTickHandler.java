@@ -16,14 +16,12 @@ import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.InterModComms;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.PacketDistributor;
 import weather2.config.ClientConfigData;
 import weather2.config.ConfigMisc;
 import weather2.config.WeatherUtilConfig;
 import weather2.weathersystem.WeatherManagerServer;
 import weather2.weathersystem.storm.StormObject;
-import weather2.weathersystem.wind.WindManager;
 
 import java.util.HashMap;
 import java.util.Map;

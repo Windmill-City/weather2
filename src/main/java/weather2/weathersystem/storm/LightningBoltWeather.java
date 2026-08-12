@@ -10,8 +10,6 @@ import javax.annotation.Nullable;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -31,9 +29,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public class LightningBoltWeather extends Entity {
-   private static final int START_LIFE = 2;
-   private static final double DAMAGE_RADIUS = 3.0D;
-   private static final double DETECTION_RADIUS = 15.0D;
    private int life;
    public long seed;
    private int flashes;

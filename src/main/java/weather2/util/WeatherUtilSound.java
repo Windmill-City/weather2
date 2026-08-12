@@ -78,8 +78,6 @@ public class WeatherUtilSound {
     public static void playNonMovingSound(Vec3 parPos, String var1, float parVolume, float parPitch, float parCutOffRange)
     {
 
-        String affix = ".ogg";
-
         SoundEvent event = SoundRegistry.get(var1);
         MovingSoundStreamingSource sound = new MovingSoundStreamingSource(parPos, event, SoundSource.WEATHER, parVolume, parPitch, parCutOffRange);
         Minecraft.getInstance().getSoundManager().play(sound);
@@ -88,9 +86,6 @@ public class WeatherUtilSound {
     @OnlyIn(Dist.CLIENT)
     public static void playMovingSound(StormObject parStorm, String var1, float parVolume, float parPitch, float parCutOffRange)
     {
-
-        String affix = ".ogg";
-
 
         SoundEvent event = SoundRegistry.get(var1);
 

@@ -42,13 +42,13 @@ public class WindTurbineModel<T extends Entity> extends HierarchicalModel<T> {
 				.texOffs(2, 16).addBox(-0.5F, -13.5F, -8.0F, 1.0F, 1.0F, 16.0F, new CubeDeformation(0.0F))
 				.texOffs(0, 14).addBox(-2.0F, -14.0F, -2.0F, 4.0F, 2.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition fin_r1 = shaft.addOrReplaceChild("fin_r1", CubeListBuilder.create().texOffs(8, 35).addBox(-2.0F, -21.0F, -1.0F, 4.0F, 22.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -13.0F, -8.0F, -0.4162F, 0.1863F, 0.3969F));
+		shaft.addOrReplaceChild("fin_r1", CubeListBuilder.create().texOffs(8, 35).addBox(-2.0F, -21.0F, -1.0F, 4.0F, 22.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -13.0F, -8.0F, -0.4162F, 0.1863F, 0.3969F));
 
-		PartDefinition fin_r2 = shaft.addOrReplaceChild("fin_r2", CubeListBuilder.create().texOffs(8, 35).addBox(-2.0F, -21.0F, -1.0F, 4.0F, 22.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -13.0F, 8.0F, 0.4164F, 0.2075F, -0.436F));
+		shaft.addOrReplaceChild("fin_r2", CubeListBuilder.create().texOffs(8, 35).addBox(-2.0F, -21.0F, -1.0F, 4.0F, 22.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.0F, -13.0F, 8.0F, 0.4164F, 0.2075F, -0.436F));
 
-		PartDefinition fin_r3 = shaft.addOrReplaceChild("fin_r3", CubeListBuilder.create().texOffs(34, 31).addBox(-1.0F, -21.0F, -2.0F, 2.0F, 22.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-8.0F, -13.0F, 0.0F, 0.4363F, 0.0F, 0.4712F));
+		shaft.addOrReplaceChild("fin_r3", CubeListBuilder.create().texOffs(34, 31).addBox(-1.0F, -21.0F, -2.0F, 2.0F, 22.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-8.0F, -13.0F, 0.0F, 0.4363F, 0.0F, 0.4712F));
 
-		PartDefinition fin_r4 = shaft.addOrReplaceChild("fin_r4", CubeListBuilder.create().texOffs(34, 31).addBox(-1.0F, -21.0F, -2.0F, 2.0F, 22.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(8.0F, -13.0F, 0.0F, -0.4363F, 0.0F, -0.4712F));
+		shaft.addOrReplaceChild("fin_r4", CubeListBuilder.create().texOffs(34, 31).addBox(-1.0F, -21.0F, -2.0F, 2.0F, 22.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(8.0F, -13.0F, 0.0F, -0.4363F, 0.0F, -0.4712F));
 
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}

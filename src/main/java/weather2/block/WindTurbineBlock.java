@@ -2,14 +2,12 @@ package weather2.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
@@ -23,7 +21,6 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.Nullable;
 import weather2.WeatherBlocks;
 import weather2.blockentity.WindTurbineBlockEntity;
-import weather2.blockentity.WindVaneBlockEntity;
 
 import java.util.List;
 
@@ -43,6 +40,7 @@ public class WindTurbineBlock extends BaseEntityBlock {
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public VoxelShape getShape(BlockState state, BlockGetter world, BlockPos pos, CollisionContext context) {
 		return SHAPE;
 	}
@@ -69,12 +67,6 @@ public class WindTurbineBlock extends BaseEntityBlock {
 	@Override
 	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level p_153212_, BlockState p_153213_, BlockEntityType<T> p_153214_) {
 		return createTickerHelper(p_153214_, WeatherBlocks.BLOCK_ENTITY_WIND_TURBINE.get(), WindTurbineBlockEntity::tick);
-	}
-
-	@Nullable
-	@SuppressWarnings("unchecked")
-	private static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTicker(final BlockEntityType<A> type, final BlockEntityType<E> tickerType, final BlockEntityTicker<? super E> ticker) {
-		return tickerType == type ? (BlockEntityTicker<A>) ticker : null;
 	}
 
 }

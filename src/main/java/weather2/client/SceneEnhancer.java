@@ -398,12 +398,6 @@ public class SceneEnhancer implements Runnable {
 
 	}
 
-	private static void tickHeatwave(ClientWeatherProxy weather) {
-		Minecraft client = Minecraft.getInstance();
-
-
-	}
-
 	public static boolean tryPlayPlayerLockedSound(String[] sound, int arrIndex, Entity source, float vol)
 	{
 		Random rand = new Random();
@@ -1333,7 +1327,7 @@ public class SceneEnhancer implements Runnable {
     {
         try
         {
-            if (!parWorld.hasChunkAt(new BlockPos(x, 0, z)))
+            if (!parWorld.isLoaded(new BlockPos(x, 0, z)))
             {
                 return null;
             }
@@ -1357,7 +1351,7 @@ public class SceneEnhancer implements Runnable {
 	{
 		try
 		{
-			if (!parWorld.hasChunkAt(new BlockPos(x, 0, z)))
+			if (!parWorld.isLoaded(new BlockPos(x, 0, z)))
 			{
 				return null;
 			}
@@ -1392,7 +1386,6 @@ public class SceneEnhancer implements Runnable {
 		Minecraft client = Minecraft.getInstance();
 		Player player = client.player;
 		Level world = client.level;
-		WindManager windMan = ClientTickHandler.weatherManager.getWindManager();
 		ClientTickHandler.getClientWeather();
 
 		boolean farSpawn = Minecraft.getInstance().player.isSpectator() || !isPlayerOutside;

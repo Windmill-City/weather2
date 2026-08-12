@@ -20,9 +20,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import weather2.WeatherBlocks;
 import weather2.block.SandLayerBlock;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 public class WeatherUtilBlock {
 
@@ -75,7 +72,6 @@ public class WeatherUtilBlock {
 				lastScannedPosXZ = new BlockPos(posXZ);
 
 				AABB aabbCompare = new AABB(pos);
-				List<AABB> listAABBCollision = new ArrayList<>();
 				VoxelShape voxelshape = Shapes.create(aabbCompare);
 
 				boolean collided = Shapes.joinIsNotEmpty(state.getCollisionShape(world, pos).move(pos.getX(), pos.getY(), pos.getZ()), voxelshape, BooleanOp.AND);
@@ -161,8 +157,6 @@ public class WeatherUtilBlock {
 			return amount;
 		}
 
-		BlockState statePos = world.getBlockState(posSpreadTo);
-
 		BlockPos posCheckNonAir = new BlockPos(posSpreadTo);
 		BlockState stateCheckNonAir = world.getBlockState(posCheckNonAir);
 
@@ -217,7 +211,7 @@ public class WeatherUtilBlock {
 			boolean collided = Shapes.joinIsNotEmpty(stateCheckPlaceable.getCollisionShape(world, posCheckPlaceable).move(posCheckPlaceable.getX(), posCheckPlaceable.getY(), posCheckPlaceable.getZ()), voxelshape, BooleanOp.AND);
 
 
-			if (stateCheckPlaceable.getBlock() != blockLayerable && !collided && !stateCheckPlaceable.liquid()) {
+			if (stateCheckPlaceable.getBlock() != blockLayerable && !collided && stateCheckPlaceable.getFluidState().isEmpty()) {
 				posCheckPlaceable = posCheckPlaceable.offset(0, -1, 0);
 				stateCheckPlaceable = world.getBlockState(posCheckPlaceable);
 				distForPlaceableBlocks++;
@@ -387,7 +381,7 @@ public class WeatherUtilBlock {
 
 
 	public static BlockPos getPrecipitationHeightSafe(Level world, BlockPos pos, Heightmap.Types heightmapType) {
-		if (world.hasChunkAt(pos)) {
+		if (world.isLoaded(pos)) {
 			return world.getHeightmapPos(heightmapType, pos);
 		} else {
 			return new BlockPos(pos.getX(), -255, pos.getZ());

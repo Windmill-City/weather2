@@ -3,12 +3,10 @@ package weather2.client.entity.particle;
 import com.corosus.coroutil.util.CoroUtilBlock;
 import com.corosus.coroutil.util.CoroUtilMisc;
 import extendedrenderer.particle.entity.ParticleCrossSection;
-import extendedrenderer.particle.entity.ParticleTexExtraRender;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.core.BlockPos;
 
 public class ParticleHail extends ParticleCrossSection {
 

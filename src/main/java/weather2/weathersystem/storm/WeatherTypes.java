@@ -12,7 +12,7 @@ public class WeatherTypes {
 	}
 
 	public static void initWeatherTypes() {
-    	weatherEntTypes = new ArrayList();
+    	weatherEntTypes = new ArrayList<>();
         WeatherEntityConfig sConf = new WeatherEntityConfig();
 
 

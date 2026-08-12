@@ -6,7 +6,6 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.BoolArgumentType;
 import com.mojang.brigadier.arguments.FloatArgumentType;
-import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -15,7 +14,6 @@ import net.minecraft.client.particle.ParticleRenderType;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import weather2.ClientTickHandler;
 import weather2.config.ConfigDebug;
 import weather2.config.ConfigParticle;
@@ -150,6 +148,7 @@ public class CommandWeather2Client {
 		);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static Map<ParticleRenderType, Queue<Particle>> getParticles() {
 		try {
 			Field[] fields = ParticleEngine.class.getDeclaredFields();

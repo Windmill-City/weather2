@@ -21,11 +21,13 @@ public class ForecastBlock extends Block {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public RenderShape getRenderShape(BlockState p_49232_) {
         return RenderShape.MODEL;
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public InteractionResult use(BlockState p_60503_, Level p_60504_, BlockPos p_60505_, Player p_60506_, InteractionHand p_60507_, BlockHitResult p_60508_) {
 
         if (!p_60504_.isClientSide) {

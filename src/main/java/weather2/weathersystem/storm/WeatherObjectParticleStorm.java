@@ -169,7 +169,7 @@ public class WeatherObjectParticleStorm extends WeatherObject {
 						BlockPos blockPos = WeatherUtilBlock.getPrecipitationHeightSafe(world, CoroUtilBlock.blockPos(vecPos.x, 0, vecPos.z));
 
 
-						if (!world.hasChunkAt(blockPos)) continue;
+						if (!world.isLoaded(blockPos)) continue;
 
 						if (buildupOutsideArea ||
 								canSpawnHere(world, blockPos, getType(), false)) {

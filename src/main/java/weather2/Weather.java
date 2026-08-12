@@ -150,7 +150,7 @@ public class Weather
     private void processIMC(final InterModProcessEvent event)
     {
         LOGGER.info("Got IMC {}", event.getIMCStream().
-                map(m->m.getMessageSupplier().get()).
+                map(m->m.messageSupplier().get()).
                 collect(Collectors.toList()));
     }
 

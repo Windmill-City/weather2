@@ -1,6 +1,5 @@
 package weather2.block;
 
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -66,23 +65,20 @@ public class SensorBlock extends BaseEntityBlock {
 		return createTickerHelper(p_153214_, WeatherBlocks.BLOCK_ENTITY_TORNADO_SENSOR.get(), SensorBlockEntity::tick);
 	}
 
-	@Nullable
-	@SuppressWarnings("unchecked")
-	private static <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTicker(final BlockEntityType<A> type, final BlockEntityType<E> tickerType, final BlockEntityTicker<? super E> ticker) {
-		return tickerType == type ? (BlockEntityTicker<A>) ticker : null;
-	}
-
 	@Override
+	@SuppressWarnings("deprecation")
 	public int getSignal(BlockState pState, BlockGetter pLevel, BlockPos pPos, Direction pDirection) {
 		return pState.getValue(POWERED) ? 15 : 0;
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public int getDirectSignal(BlockState pBlockState, BlockGetter pBlockAccess, BlockPos pPos, Direction pSide) {
 		return pBlockState.getValue(POWERED) ? 15 : 0;
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isSignalSource(BlockState pState) {
 		return true;
 	}

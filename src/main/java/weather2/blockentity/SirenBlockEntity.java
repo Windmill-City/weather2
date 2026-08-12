@@ -17,7 +17,6 @@ import weather2.util.WeatherUtilSound;
 import weather2.weathersystem.storm.StormObject;
 import weather2.weathersystem.storm.WeatherObjectParticleStorm;
 
-import java.util.List;
 
 public class SirenBlockEntity extends BlockEntity {
 

@@ -117,7 +117,7 @@ public class WindTurbineBlockEntity extends BlockEntity {
 					if (be != this && storage.getEnergyStored() < storage.getMaxEnergyStored()) {
 						this.energyManager.drainEnergy(this.energyManager.getMaxExtract());
 
-						final int received = storage.receiveEnergy(this.energyManager.getMaxExtract(), false);
+						storage.receiveEnergy(this.energyManager.getMaxExtract(), false);
 
 					}
 				});

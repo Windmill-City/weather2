@@ -10,18 +10,13 @@ import javax.annotation.Nullable;
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseFireBlock;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LightningRodBlock;
 import net.minecraft.world.level.block.WeatheringCopper;
@@ -31,9 +26,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public class LightningBoltWeatherNew extends Entity {
-   private static final int START_LIFE = 2;
-   private static final double DAMAGE_RADIUS = 3.0D;
-   private static final double DETECTION_RADIUS = 15.0D;
    private int life;
    public long seed;
    private int flashes;
@@ -137,27 +129,6 @@ public class LightningBoltWeatherNew extends Entity {
    private BlockPos getStrikePosition() {
       Vec3 vec3 = this.position();
       return CoroUtilBlock.blockPos(vec3.x, vec3.y - 1.0E-6D, vec3.z);
-   }
-
-   private void spawnFire(int p_20871_) {
-      if (!this.visualOnly && !this.level().isClientSide && this.level().getGameRules().getBoolean(GameRules.RULE_DOFIRETICK)) {
-         BlockPos blockpos = this.blockPosition();
-         BlockState blockstate = BaseFireBlock.getState(this.level(), blockpos);
-         if (this.level().getBlockState(blockpos).isAir() && blockstate.canSurvive(this.level(), blockpos)) {
-            this.level().setBlockAndUpdate(blockpos, blockstate);
-            ++this.blocksSetOnFire;
-         }
-
-         for(int i = 0; i < p_20871_; ++i) {
-            BlockPos blockpos1 = blockpos.offset(this.random.nextInt(3) - 1, this.random.nextInt(3) - 1, this.random.nextInt(3) - 1);
-            blockstate = BaseFireBlock.getState(this.level(), blockpos1);
-            if (this.level().getBlockState(blockpos1).isAir() && blockstate.canSurvive(this.level(), blockpos1)) {
-               this.level().setBlockAndUpdate(blockpos1, blockstate);
-               ++this.blocksSetOnFire;
-            }
-         }
-
-      }
    }
 
    private static void clearCopperOnLightningStrike(Level p_147151_, BlockPos p_147152_) {

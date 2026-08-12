@@ -1,7 +1,5 @@
 package weather2.config;
 
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.level.Level;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,7 +35,7 @@ public class WeatherUtilConfig {
 				arrStr[i] = "minecraft:none";
 			}
 		}
-		return new ArrayList(Arrays.asList(arrStr));
+		return new ArrayList<>(Arrays.asList(arrStr));
 	}
 
 }

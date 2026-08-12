@@ -3,7 +3,6 @@ package weather2;
 import com.corosus.coroutil.util.CULog;
 import extendedrenderer.ParticleManagerExtended;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.BackupConfirmScreen;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;

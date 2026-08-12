@@ -1,14 +1,8 @@
 package weather2.player;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import net.minecraft.nbt.CompoundTag;
-import weather2.Weather;
 
 public class PlayerData {
 

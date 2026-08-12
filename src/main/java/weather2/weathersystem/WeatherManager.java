@@ -162,7 +162,6 @@ public abstract class WeatherManager implements IWorldData {
 			listStormObjects.add(so);
 			lookupStormObjectsByID.put(so.ID, so);
 			if (so instanceof StormObject) {
-				StormObject so2 = (StormObject) so;
 			}
 		} else {
 			Weather.dbg("Weather2 WARNING!!! Received new storm create for an ID that is already active! design bug or edgecase with PlayerEvent.Clone, ID: " + so.ID);
@@ -179,7 +178,6 @@ public abstract class WeatherManager implements IWorldData {
 			listStormObjects.remove(so);
 			lookupStormObjectsByID.remove(ID);
 			if (so instanceof StormObject) {
-				StormObject so2 = (StormObject) so;
 			}
 		} else {
 			Weather.dbg("error looking up storm ID on server for removal: " + ID + " - lookup count: " + lookupStormObjectsByID.size() + " - last used ID: " + WeatherObject.lastUsedStormID);

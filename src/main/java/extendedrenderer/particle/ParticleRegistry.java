@@ -109,6 +109,7 @@ public class ParticleRegistry extends SpriteSourceProvider {
 	}
 
 	@SubscribeEvent
+	@SuppressWarnings("deprecation")
 	public static void getRegisteredParticles(TextureStitchEvent.Post event) {
 
 		if (!event.getAtlas().location().equals(TextureAtlas.LOCATION_PARTICLES)) {

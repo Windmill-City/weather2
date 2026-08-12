@@ -8,7 +8,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import weather2.WeatherBlocks;
-import weather2.block.AnemometerBlock;
 import weather2.util.WeatherUtilEntity;
 import weather2.util.WindReader;
 

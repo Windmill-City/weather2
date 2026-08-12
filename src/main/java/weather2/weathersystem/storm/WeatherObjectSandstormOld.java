@@ -112,7 +112,7 @@ public class WeatherObjectSandstormOld extends WeatherObject {
 					BlockPos blockPos = CoroUtilBlock.blockPos(vecPos.x, y, vecPos.z);
 
 
-					if (!world.hasChunkAt(blockPos)) continue;
+					if (!world.isLoaded(blockPos)) continue;
 
 					Biome biomeIn = world.getBiome(blockPos).get();
 
