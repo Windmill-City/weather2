@@ -117,7 +117,7 @@ public class WeatherManagerServer extends WeatherManager {
 						Player entP = world.players().get(i);
 
 
-						if (getStormObjects().size() < ConfigStorm.Storm_MaxPerPlayerPerLayer * world.players().size()) {
+						if (getStormObjects().size() < world.players().size()) {
 							if (rand.nextInt(5) == 0) {
 
 								trySpawnStormCloudNearPlayerForLayer(entP, 0);
@@ -192,6 +192,10 @@ public class WeatherManagerServer extends WeatherManager {
 				}
 			});
 		}
+	}
+
+	private PacketDistributor.PacketTarget distributorNear(Vec3 pos, double range) {
+		return PacketDistributor.NEAR.with(() -> new PacketDistributor.TargetPoint(pos.x, pos.y, pos.z, range, getWorld().dimension()));
 	}
 
 	public void syncStormRemove(WeatherObject parStorm) {
@@ -520,7 +524,7 @@ public class WeatherManagerServer extends WeatherManager {
 		nbt.putLong("ownerID", owner.ID);
 		data.put("data", nbt);
 
-		WeatherNetworking.HANDLER.send(PacketDistributor.DIMENSION.with(() -> getWorld().dimension()), new PacketNBTFromServer(data));
+		WeatherNetworking.HANDLER.send(distributorNear(new Vec3(pos.getX(), pos.getY(), pos.getZ()), 512), new PacketNBTFromServer(data));
 	}
 
 	public void syncStormNew(WeatherObject parStorm) {
@@ -539,7 +543,7 @@ public class WeatherManagerServer extends WeatherManager {
 		data.put("data", cache.getNewNBT());
 
 		if (entP == null) {
-			WeatherNetworking.HANDLER.send(PacketDistributor.DIMENSION.with(() -> getWorld().dimension()), new PacketNBTFromServer(data));
+			WeatherNetworking.HANDLER.send(distributorNear(parStorm.pos, ConfigMisc.Misc_simBoxRadiusCutoff), new PacketNBTFromServer(data));
 		} else {
 			WeatherNetworking.HANDLER.sendTo(new PacketNBTFromServer(data), entP.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
 		}
@@ -552,7 +556,11 @@ public class WeatherManagerServer extends WeatherManager {
 		data.putString("command", "syncStormUpdate");
 		parStorm.getNbtCache().setNewNBT(new CompoundTag());
 		parStorm.nbtSyncForClient();
-		data.put("data", parStorm.getNbtCache().getNewNBT());
+		CompoundTag stormNBT = parStorm.getNbtCache().getNewNBT();
+		if (stormNBT.size() <= 1) {
+			return;
+		}
+		data.put("data", stormNBT);
 		boolean testNetworkData = false;
 		if (testNetworkData) {
 			System.out.println("sending to client: " + parStorm.getNbtCache().getNewNBT().getAllKeys().size());
@@ -572,7 +580,7 @@ public class WeatherManagerServer extends WeatherManager {
 			}
 			System.out.println("sending    " + keys);
 		}
-		WeatherNetworking.HANDLER.send(PacketDistributor.DIMENSION.with(() -> getWorld().dimension()), new PacketNBTFromServer(data));
+		WeatherNetworking.HANDLER.send(distributorNear(parStorm.pos, ConfigMisc.Misc_simBoxRadiusCutoff), new PacketNBTFromServer(data));
 	}
 
 	public void syncWeatherVanilla() {
